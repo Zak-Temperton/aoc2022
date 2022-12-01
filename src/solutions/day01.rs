@@ -21,11 +21,11 @@ pub(crate) fn part2(text: &str) -> u32 {
     let mut cur = 0;
     for line in text.lines() {
         if line.is_empty() {
-            if cur >= first {
+            if cur > first {
                 third = second;
                 second = first;
                 first = cur;
-            } else if cur >= second {
+            } else if cur > second {
                 third = second;
                 second = cur;
             } else if cur > third {
@@ -37,4 +37,22 @@ pub(crate) fn part2(text: &str) -> u32 {
         }
     }
     first + second + third
+}
+
+#[allow(soft_unstable, unused_imports)]
+mod bench {
+    use super::*;
+    use std::fs::read_to_string;
+    use test::Bencher;
+
+    #[bench]
+    fn day01_part1(b: &mut Bencher) {
+        let text = read_to_string("res/day01.txt").unwrap();
+        b.iter(|| part1(&text));
+    }
+    #[bench]
+    fn day01_part2(b: &mut Bencher) {
+        let text = read_to_string("res/day01.txt").unwrap();
+        b.iter(|| part2(&text));
+    }
 }
