@@ -40,7 +40,7 @@ pub(crate) fn part2(text: &str) -> u32 {
 }
 
 #[allow(soft_unstable, unused_imports)]
-mod bench {
+mod bench_day01 {
     use super::*;
     use std::fs::read_to_string;
     use test::Bencher;

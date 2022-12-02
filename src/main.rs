@@ -20,7 +20,7 @@ fn main() {
     let captures = r_day.captures(day.as_str()).unwrap();
     match captures.get(1).unwrap().as_str().parse::<u32>().unwrap() {
         1 => day01(),
-        // 2 => day02(),
+        2 => day02(),
         // 3 => day03(),
         // 4 => day04(),
         // 5 => day05(),
