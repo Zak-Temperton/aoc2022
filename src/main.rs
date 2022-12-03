@@ -21,7 +21,7 @@ fn main() {
     match captures.get(1).unwrap().as_str().parse::<u32>().unwrap() {
         1 => day01(),
         2 => day02(),
-        // 3 => day03(),
+        3 => day03(),
         // 4 => day04(),
         // 5 => day05(),
         // 6 => day06(),
