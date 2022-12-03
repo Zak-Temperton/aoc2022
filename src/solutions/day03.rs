@@ -16,7 +16,7 @@ pub(crate) fn part1(text: &str) -> u32 {
 
 fn char_to_priority(c: &u8) -> u8 {
     if *c < b'a' {
-        (*c - b'A') + 27
+        *c - b'A' + 27
     } else {
         *c - b'a' + 1
     }
@@ -47,4 +47,22 @@ pub(crate) fn part2(text: &str) -> u32 {
         }
     }
     sum
+}
+
+#[allow(soft_unstable, unused_imports)]
+mod bench_day03 {
+    use super::*;
+    use std::fs::read_to_string;
+    use test::Bencher;
+
+    #[bench]
+    fn day03_part1(b: &mut Bencher) {
+        let text = read_to_string("res/day03.txt").unwrap();
+        b.iter(|| part1(&text));
+    }
+    #[bench]
+    fn day03_part2(b: &mut Bencher) {
+        let text = read_to_string("res/day03.txt").unwrap();
+        b.iter(|| part2(&text));
+    }
 }
