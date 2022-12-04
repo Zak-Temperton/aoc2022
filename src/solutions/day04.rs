@@ -2,7 +2,7 @@ use regex::Regex;
 
 pub(crate) fn part1(text: &str) -> u32 {
     let mut count = 0;
-    let rgx = Regex::new(r"(\d+)-(\d+),(\d+)-(\d+)\r\n").unwrap();
+    let rgx = Regex::new(r"(\d+)-(\d+),(\d+)-(\d+)").unwrap();
     for cap in rgx.captures_iter(text) {
         let mut cap = cap.iter();
         cap.next();
@@ -17,7 +17,7 @@ pub(crate) fn part1(text: &str) -> u32 {
 }
 pub(crate) fn part2(text: &str) -> u32 {
     let mut count = 0;
-    let rgx = Regex::new(r"(\d+)-(\d+),(\d+)-(\d+)\r\n").unwrap();
+    let rgx = Regex::new(r"(\d+)-(\d+),(\d+)-(\d+)").unwrap();
     for cap in rgx.captures_iter(text) {
         let cap = cap.iter();
         let cap = cap
