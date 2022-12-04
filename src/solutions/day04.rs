@@ -1,29 +1,30 @@
 use regex::Regex;
 
 pub(crate) fn part1(text: &str) -> u32 {
+    let rgx = Regex::new("[-,]").unwrap();
     let mut count = 0;
-    let rgx = Regex::new(r"(\d+)-(\d+),(\d+)-(\d+)").unwrap();
-    for cap in rgx.captures_iter(text) {
-        let mut cap = cap.iter();
-        cap.next();
-        let cap = cap
-            .flat_map(|c| c.unwrap().as_str().parse::<u32>())
-            .collect::<Vec<_>>();
-        if (cap[0] <= cap[2] && cap[1] >= cap[3]) || (cap[0] >= cap[2] && cap[1] <= cap[3]) {
+    let mut a = [0; 4];
+    for line in text.lines() {
+        let mut split = rgx.split(line);
+        for a in a.iter_mut() {
+            *a = split.next().unwrap().parse().unwrap();
+        }
+        if (a[0] <= a[2] && a[1] >= a[3]) || (a[0] >= a[2] && a[1] <= a[3]) {
             count += 1;
         }
     }
     count
 }
 pub(crate) fn part2(text: &str) -> u32 {
+    let rgx = Regex::new("[-,]").unwrap();
     let mut count = 0;
-    let rgx = Regex::new(r"(\d+)-(\d+),(\d+)-(\d+)").unwrap();
-    for cap in rgx.captures_iter(text) {
-        let cap = cap.iter();
-        let cap = cap
-            .flat_map(|c| c.unwrap().as_str().parse::<u32>())
-            .collect::<Vec<_>>();
-        if cap[0] <= cap[3] && cap[1] >= cap[2] {
+    let mut a = [0; 4];
+    for line in text.lines() {
+        let mut split = rgx.split(line);
+        for a in a.iter_mut() {
+            *a = split.next().unwrap().parse().unwrap();
+        }
+        if a[0] <= a[3] && a[1] >= a[2] {
             count += 1;
         }
     }
