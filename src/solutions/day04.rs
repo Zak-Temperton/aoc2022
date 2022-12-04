@@ -1,11 +1,8 @@
-use regex::Regex;
-
 pub(crate) fn part1(text: &str) -> u32 {
-    let rgx = Regex::new("[-,]").unwrap();
     let mut count = 0;
     let mut a = [0; 4];
     for line in text.lines() {
-        let mut split = rgx.split(line);
+        let mut split = line.split(',').flat_map(|s| s.split('-'));
         for a in a.iter_mut() {
             *a = split.next().unwrap().parse().unwrap();
         }
@@ -16,11 +13,10 @@ pub(crate) fn part1(text: &str) -> u32 {
     count
 }
 pub(crate) fn part2(text: &str) -> u32 {
-    let rgx = Regex::new("[-,]").unwrap();
     let mut count = 0;
     let mut a = [0; 4];
     for line in text.lines() {
-        let mut split = rgx.split(line);
+        let mut split = line.split(',').flat_map(|s| s.split('-'));
         for a in a.iter_mut() {
             *a = split.next().unwrap().parse().unwrap();
         }
