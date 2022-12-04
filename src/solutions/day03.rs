@@ -14,7 +14,7 @@ pub(crate) fn part1(text: &str) -> u32 {
     sum
 }
 
-fn char_to_priority(c: &u8) -> u8 {
+const fn char_to_priority(c: &u8) -> u8 {
     if *c < b'a' {
         *c - b'A' + 27
     } else {
