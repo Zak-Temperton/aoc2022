@@ -8,3 +8,4 @@ My solutions to Advent of Code 2022 in Rust
 | 02  | [Rock Paper Scissors](https://adventofcode.com/2022/day/2)     | [day02.rs](src/solutions/day02.rs) |
 | 03  | [Rucksack Reorganization](https://adventofcode.com/2022/day/3) | [day03.rs](src/solutions/day03.rs) |
 | 04  | [Camp Cleanup](https://adventofcode.com/2022/day/4)            | [day04.rs](src/solutions/day04.rs) |
+| 05  | [Supply Stacks](https://adventofcode.com/2022/day/5)           | [day05.rs](src/solutions/day05.rs) |
