@@ -1,58 +1,53 @@
-pub(crate) fn part1(text: &str) -> String {
+fn setup(lines: &mut std::str::Lines) -> Vec<Vec<char>> {
     let mut stacks = vec![Vec::new(); 9];
-
-    let setup: Vec<_> = text.lines().take(8).collect();
-    for line in setup.iter().rev() {
-        let bytes = line.as_bytes();
+    for _ in 0..8 {
+        let bytes = lines.next().unwrap().as_bytes();
         for i in 0..9 {
             match bytes.get(i * 4 + 1) {
                 Some(&c) if c != b' ' => stacks[i].push(c as char),
-                _ => {}
+                Some(_) => {}
+                _ => break,
             }
         }
     }
-    for line in text.lines().skip(10) {
-        let line = line.split_whitespace().collect::<Vec<_>>();
+    stacks.iter_mut().for_each(|v| v.reverse());
+    stacks
+}
 
-        let amount = line[1].parse::<usize>().unwrap();
-        let from = line[3].parse::<usize>().unwrap() - 1;
-        let to = line[5].parse::<usize>().unwrap() - 1;
+pub(crate) fn part1(text: &str) -> String {
+    let mut lines = text.lines();
+    let mut stacks = setup(&mut lines);
+    for line in lines.skip(2) {
+        let split = line.split_whitespace().collect::<Vec<_>>();
+
+        let amount = split[1].parse::<usize>().unwrap();
+        let from = split[3].parse::<usize>().unwrap() - 1;
+        let to = split[5].parse::<usize>().unwrap() - 1;
         for _ in 0..amount {
             let tmp = stacks[from].pop().unwrap();
             stacks[to].push(tmp);
         }
     }
-
     let mut res = String::new();
     for s in stacks {
-        res.push(*(s.last().unwrap_or(&' ')) as char);
+        res.push(*(s.last().unwrap()));
     }
     res
 }
 
 pub(crate) fn part2(text: &str) -> String {
-    let mut stacks = vec![Vec::new(); 9];
+    let mut lines = text.lines();
+    let mut stacks = setup(&mut lines);
+    for line in lines.skip(2) {
+        let split = line.split_whitespace().collect::<Vec<_>>();
 
-    let setup: Vec<_> = text.lines().take(8).collect();
-    for line in setup.iter().rev() {
-        let bytes = line.as_bytes();
-        for i in 0..9 {
-            match bytes.get(i * 4 + 1) {
-                Some(&c) if c != b' ' => stacks[i].push(c as char),
-                _ => {}
-            }
-        }
-    }
-    for line in text.lines().skip(10) {
-        let line = line.split_whitespace().collect::<Vec<_>>();
-
-        let amount = line[1].parse::<usize>().unwrap();
-        let from = line[3].parse::<usize>().unwrap() - 1;
-        let to = line[5].parse::<usize>().unwrap() - 1;
+        let amount = split[1].parse::<usize>().unwrap();
+        let from = split[3].parse::<usize>().unwrap() - 1;
+        let to = split[5].parse::<usize>().unwrap() - 1;
 
         let from_len = stacks[from].len();
         let mut tmp = stacks[from].split_off(from_len - amount);
-        stacks[to as usize].append(&mut tmp);
+        stacks[to].append(&mut tmp);
     }
 
     let mut res = String::new();
