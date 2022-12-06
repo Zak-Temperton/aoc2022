@@ -2,9 +2,9 @@ fn setup(lines: &mut std::str::Lines) -> Vec<Vec<char>> {
     let mut stacks = vec![Vec::new(); 9];
     for _ in 0..8 {
         let bytes = lines.next().unwrap().as_bytes();
-        for i in 0..9 {
+        for (i, stack) in stacks.iter_mut().enumerate() {
             match bytes.get(i * 4 + 1) {
-                Some(&c) if c != b' ' => stacks[i].push(c as char),
+                Some(&c) if c != b' ' => stack.push(c as char),
                 Some(_) => {}
                 _ => break,
             }
