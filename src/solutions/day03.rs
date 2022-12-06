@@ -23,22 +23,23 @@ const fn char_to_priority(c: &u8) -> u8 {
 }
 
 pub(crate) fn part2(text: &str) -> u32 {
-    let lines: Vec<Vec<u8>> = text
+    let mut lines = text
         .lines()
-        .map(|i| i.bytes().map(|c| char_to_priority(&c)).collect())
-        .collect();
+        .map(|i| i.bytes().map(|c| char_to_priority(&c)));
     let mut sum = 0;
     let mut letters: [u8; 53];
-    for group in lines.chunks(3) {
+    while let (Some(group_a), Some(group_b), Some(group_c)) =
+        (lines.next(), lines.next(), lines.next())
+    {
         letters = [0; 53];
-        group[0].iter().for_each(|&i| letters[i as usize] = 1);
-        for &letter in group[1].iter() {
+        group_a.for_each(|i| letters[i as usize] = 1);
+        for letter in group_b {
             let l = &mut letters[letter as usize];
             if *l == 1 {
                 *l = 2;
             }
         }
-        for &letter in group[2].iter() {
+        for letter in group_c {
             let l = &mut letters[letter as usize];
             if *l == 2 {
                 sum += letter as u32;
