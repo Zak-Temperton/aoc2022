@@ -1,4 +1,7 @@
-pub(crate) fn part1(text: &str) -> u32 {
+fn solution<P>(text: &str, p: P) -> u32
+where
+    P: Fn(&[i32; 4]) -> bool,
+{
     let mut count = 0;
     let mut a = [0; 4];
     for line in text.lines() {
@@ -6,25 +9,20 @@ pub(crate) fn part1(text: &str) -> u32 {
         for a in a.iter_mut() {
             *a = split.next().unwrap().parse().unwrap();
         }
-        if (a[0] <= a[2] && a[1] >= a[3]) || (a[0] >= a[2] && a[1] <= a[3]) {
+        if p(&a) {
             count += 1;
         }
     }
     count
 }
+
+pub(crate) fn part1(text: &str) -> u32 {
+    solution(text, |a| {
+        (a[0] <= a[2] && a[1] >= a[3]) || (a[0] >= a[2] && a[1] <= a[3])
+    })
+}
 pub(crate) fn part2(text: &str) -> u32 {
-    let mut count = 0;
-    let mut a = [0; 4];
-    for line in text.lines() {
-        let mut split = line.split(',').flat_map(|s| s.split('-'));
-        for a in a.iter_mut() {
-            *a = split.next().unwrap().parse().unwrap();
-        }
-        if a[0] <= a[3] && a[1] >= a[2] {
-            count += 1;
-        }
-    }
-    count
+    solution(text, |a| a[0] <= a[3] && a[1] >= a[2])
 }
 
 #[allow(soft_unstable, unused_imports, dead_code)]
