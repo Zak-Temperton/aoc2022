@@ -13,7 +13,7 @@ fn setup(lines: &mut std::str::Lines) -> Vec<Vec<char>> {
     stacks
 }
 
-fn get_params(line: &str, stacks: &Vec<Vec<char>>) -> (usize, usize, usize, usize) {
+fn get_params(line: &str, stacks: &[Vec<char>]) -> (usize, usize, usize, usize) {
     let mut split = line.split_whitespace().skip(1).step_by(2);
     let amount = split.next().unwrap().parse::<usize>().unwrap();
     let from = split.next().unwrap().parse::<usize>().unwrap() - 1;
@@ -63,7 +63,7 @@ mod bench {
     use super::*;
     use std::fs::read_to_string;
     use test::Bencher;
-    const PATH: &'static str = "res/day05.txt";
+    const PATH: &str = "res/day05.txt";
     #[bench]
     fn part1_bench(b: &mut Bencher) {
         let text = read_to_string(PATH).unwrap();

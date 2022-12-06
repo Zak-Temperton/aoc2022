@@ -61,7 +61,7 @@ mod bench {
     use super::*;
     use std::fs::read_to_string;
     use test::Bencher;
-    const PATH: &'static str = "res/day03.txt";
+    const PATH: &str = "res/day03.txt";
     #[bench]
     fn part1_bench(b: &mut Bencher) {
         let text = read_to_string(PATH).unwrap();
