@@ -1,10 +1,10 @@
 use std::collections::VecDeque;
 
-pub(crate) fn part1(text: &str) -> usize {
-    let mut packet = VecDeque::with_capacity(4);
+fn solution(text: &str, packet_len: usize) -> usize {
+    let mut packet = VecDeque::with_capacity(packet_len);
     let mut count = 0;
 
-    for (i, c) in text.chars().enumerate().take(4) {
+    for (i, c) in text.chars().enumerate().take(packet_len) {
         if let Some(j) = packet.iter().rev().position(|&x| x == c) {
             if i - j >= count {
                 count = i - j;
@@ -16,8 +16,8 @@ pub(crate) fn part1(text: &str) -> usize {
     for (i, c) in text.chars().enumerate().skip(4) {
         packet.pop_front();
         if let Some(j) = packet.iter().rev().position(|&x| x == c) {
-            if 3 - j >= count {
-                count = 3 - j;
+            if (packet_len - 1) - j >= count {
+                count = (packet_len - 1) - j;
             }
         } else if count == 0 {
             return i + 1;
@@ -28,30 +28,12 @@ pub(crate) fn part1(text: &str) -> usize {
     panic!("Marker not found")
 }
 
+pub(crate) fn part1(text: &str) -> usize {
+    solution(text, 4)
+}
+
 pub(crate) fn part2(text: &str) -> usize {
-    let mut packet = VecDeque::with_capacity(14);
-    let mut count = 0;
-    for (i, c) in text.chars().enumerate().take(14) {
-        if let Some(j) = packet.iter().rev().position(|&x| x == c) {
-            if i - j >= count {
-                count = i - j;
-            }
-        }
-        packet.push_back(c);
-    }
-    for (i, c) in text.chars().enumerate().skip(14) {
-        packet.pop_front();
-        if let Some(j) = packet.iter().rev().position(|&x| x == c) {
-            if 13 - j >= count {
-                count = 13 - j;
-            }
-        } else if count == 0 {
-            return i + 1;
-        }
-        count -= 1;
-        packet.push_back(c);
-    }
-    panic!("Marker not found")
+    solution(text, 14)
 }
 
 #[allow(soft_unstable, unused_imports, dead_code)]
