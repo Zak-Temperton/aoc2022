@@ -22,10 +22,13 @@ pub(crate) fn part1(text: &str) -> String {
         let amount = split.next().unwrap().parse::<usize>().unwrap();
         let from = split.next().unwrap().parse::<usize>().unwrap() - 1;
         let to = split.next().unwrap().parse::<usize>().unwrap() - 1;
-        for _ in 0..amount {
-            let tmp = stacks[from].pop().unwrap();
+
+        let from_len = stacks[from].len();
+        for i in 1..amount + 1 {
+            let tmp = stacks[from][from_len - i];
             stacks[to].push(tmp);
         }
+        stacks[from].truncate(from_len - amount);
     }
     let mut res = String::new();
     for s in stacks {
@@ -54,10 +57,11 @@ pub(crate) fn part2(text: &str) -> String {
 
     let mut res = String::new();
     for s in stacks {
-        res.push(*(s.last().unwrap_or(&' ')) as char);
+        res.push(*(s.last().unwrap()) as char);
     }
     res
 }
+
 #[allow(soft_unstable, unused_imports, dead_code)]
 mod bench {
     use super::*;
