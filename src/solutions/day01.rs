@@ -39,20 +39,20 @@ pub(crate) fn part2(text: &str) -> u32 {
     first + second + third
 }
 
-#[allow(soft_unstable, unused_imports)]
-mod bench_day01 {
+#[allow(soft_unstable, unused_imports, dead_code)]
+mod bench {
     use super::*;
     use std::fs::read_to_string;
     use test::Bencher;
-
+    const PATH: &'static str = "res/day01.txt";
     #[bench]
-    fn day01_part1(b: &mut Bencher) {
-        let text = read_to_string("res/day01.txt").unwrap();
+    fn part1_bench(b: &mut Bencher) {
+        let text = read_to_string(PATH).unwrap();
         b.iter(|| part1(&text));
     }
     #[bench]
-    fn day01_part2(b: &mut Bencher) {
-        let text = read_to_string("res/day01.txt").unwrap();
+    fn part2_bench(b: &mut Bencher) {
+        let text = read_to_string(PATH).unwrap();
         b.iter(|| part2(&text));
     }
 }

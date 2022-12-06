@@ -64,20 +64,20 @@ pub(crate) fn part2(text: &str) -> usize {
     panic!("Marker not found")
 }
 
-#[allow(soft_unstable, unused_imports)]
+#[allow(soft_unstable, unused_imports, dead_code)]
 mod bench {
     use super::*;
     use std::fs::read_to_string;
     use test::Bencher;
-
+    const PATH: &'static str = "res/day06.txt";
     #[bench]
     fn part1_bench(b: &mut Bencher) {
-        let text = read_to_string("res/day06.txt").unwrap();
+        let text = read_to_string(PATH).unwrap();
         b.iter(|| part1(&text));
     }
     #[bench]
     fn part2_bench(b: &mut Bencher) {
-        let text = read_to_string("res/day06.txt").unwrap();
+        let text = read_to_string(PATH).unwrap();
         b.iter(|| part2(&text));
     }
 }
