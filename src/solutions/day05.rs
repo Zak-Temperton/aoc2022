@@ -45,8 +45,11 @@ pub(crate) fn part2(text: &str) -> String {
         let to = split.next().unwrap().parse::<usize>().unwrap() - 1;
 
         let from_len = stacks[from].len();
-        let mut tmp = stacks[from].split_off(from_len - amount);
-        stacks[to].append(&mut tmp);
+        for i in (1..amount + 1).rev() {
+            let tmp = stacks[from][from_len - i];
+            stacks[to].push(tmp);
+        }
+        stacks[from].truncate(from_len - amount);
     }
 
     let mut res = String::new();
