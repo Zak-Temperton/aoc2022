@@ -1,12 +1,18 @@
 pub(crate) fn part1(text: &str) -> u32 {
     let mut sum = 0;
+    let mut letters: [bool; 53];
+
     for line in text.lines() {
         let half = line.len() / 2;
-        let left = line[0..half].as_bytes();
-        let right = line[half..].as_bytes();
-        for l in left.iter() {
-            if right.contains(l) {
-                sum += char_to_priority(l) as u32;
+        let left = line[0..half].bytes().map(|c| char_to_priority(&c));
+        let right = line[half..].bytes().map(|c| char_to_priority(&c));
+        letters = [false; 53];
+
+        left.for_each(|i| letters[i as usize] = true);
+        for i in right {
+            let l = letters[i as usize];
+            if l {
+                sum += i as u32;
                 break;
             }
         }
@@ -40,8 +46,8 @@ pub(crate) fn part2(text: &str) -> u32 {
             }
         }
         for letter in group_c {
-            let l = &mut letters[letter as usize];
-            if *l == 2 {
+            let l = letters[letter as usize];
+            if l == 2 {
                 sum += letter as u32;
                 break;
             }
