@@ -1,7 +1,7 @@
 use std::collections::VecDeque;
 
 pub(crate) fn part1(text: &str) -> usize {
-    let mut packet = VecDeque::new();
+    let mut packet = VecDeque::with_capacity(4);
     let mut count = 0;
 
     for (i, c) in text.chars().enumerate().take(4) {
@@ -29,7 +29,7 @@ pub(crate) fn part1(text: &str) -> usize {
 }
 
 pub(crate) fn part2(text: &str) -> usize {
-    let mut packet = VecDeque::new();
+    let mut packet = VecDeque::with_capacity(14);
     let mut count = 0;
     for (i, c) in text.chars().enumerate().take(14) {
         if let Some(j) = packet.iter().rev().position(|&x| x == c) {
