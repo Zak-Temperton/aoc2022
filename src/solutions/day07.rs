@@ -14,24 +14,6 @@ impl Directory {
     }
 }
 
-pub(crate) fn part1(text: &str) -> usize {
-    let mut lines = text.lines();
-    let mut dummy = Directory::new();
-    create_directories(&mut dummy, &mut lines);
-    let mut size = 0;
-    sum_small_dir(&dummy, &mut size);
-    size
-}
-
-fn sum_small_dir(dir: &Directory, sum: &mut usize) {
-    for (_, child) in dir.children.iter() {
-        if child.size < 100000 {
-            *sum += child.size;
-        }
-        sum_small_dir(child, sum);
-    }
-}
-
 fn create_directories(dir: &mut Directory, lines: &mut Lines) -> usize {
     let mut sum = 0;
     while let Some(intruction) = lines.next() {
@@ -62,14 +44,22 @@ fn create_directories(dir: &mut Directory, lines: &mut Lines) -> usize {
     sum
 }
 
-pub(crate) fn part2(text: &str) -> usize {
+fn sum_small_dir(dir: &Directory, sum: &mut usize) {
+    for (_, child) in dir.children.iter() {
+        if child.size < 100000 {
+            *sum += child.size;
+        }
+        sum_small_dir(child, sum);
+    }
+}
+
+pub(crate) fn part1(text: &str) -> usize {
     let mut lines = text.lines();
     let mut dummy = Directory::new();
     create_directories(&mut dummy, &mut lines);
-    let space_needed = 30_000_000 - (70_000_000 - dummy.size);
-    let mut min = usize::MAX;
-    find_min(&dummy, &space_needed, &mut min);
-    min
+    let mut size = 0;
+    sum_small_dir(&dummy, &mut size);
+    size
 }
 
 fn find_min(dir: &Directory, space_needed: &usize, min: &mut usize) {
@@ -79,6 +69,16 @@ fn find_min(dir: &Directory, space_needed: &usize, min: &mut usize) {
         }
         find_min(child, space_needed, min);
     }
+}
+
+pub(crate) fn part2(text: &str) -> usize {
+    let mut lines = text.lines();
+    let mut dummy = Directory::new();
+    create_directories(&mut dummy, &mut lines);
+    let space_needed = 30_000_000 - (70_000_000 - dummy.size);
+    let mut min = usize::MAX;
+    find_min(&dummy, &space_needed, &mut min);
+    min
 }
 
 #[allow(soft_unstable, unused_imports, dead_code)]
