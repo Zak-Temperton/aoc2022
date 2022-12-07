@@ -1,13 +1,13 @@
 use std::{collections::HashMap, str::Lines};
 
-struct Data {
+struct Directory {
     size: usize,
-    pub children: HashMap<String, Data>,
+    pub children: HashMap<String, Directory>,
 }
 
-impl Data {
-    pub fn new() -> Data {
-        Data {
+impl Directory {
+    pub fn new() -> Directory {
+        Directory {
             size: 0,
             children: HashMap::new(),
         }
@@ -16,14 +16,14 @@ impl Data {
 
 pub(crate) fn part1(text: &str) -> usize {
     let mut lines = text.lines();
-    let mut dummy = Data::new();
+    let mut dummy = Directory::new();
     create_directories(&mut dummy, &mut lines);
     let mut size = 0;
     sum_small_dir(&dummy, &mut size);
     size
 }
 
-fn sum_small_dir(dir: &Data, sum: &mut usize) {
+fn sum_small_dir(dir: &Directory, sum: &mut usize) {
     for (_, child) in dir.children.iter() {
         if child.size < 100000 {
             *sum += child.size;
@@ -32,7 +32,7 @@ fn sum_small_dir(dir: &Data, sum: &mut usize) {
     }
 }
 
-fn create_directories(dir: &mut Data, lines: &mut Lines) -> usize {
+fn create_directories(dir: &mut Directory, lines: &mut Lines) -> usize {
     let mut sum = 0;
     while let Some(intruction) = lines.next() {
         let mut split = intruction.split_whitespace();
@@ -44,14 +44,16 @@ fn create_directories(dir: &mut Data, lines: &mut Lines) -> usize {
                 }
                 n => {
                     sum += create_directories(
-                        dir.children.entry(n.to_string()).or_insert(Data::new()),
+                        dir.children
+                            .entry(n.to_string())
+                            .or_insert(Directory::new()),
                         lines,
                     )
                 }
             },
             ("$", _) => {}
             ("dir", n) => {
-                let _ = dir.children.try_insert(n.to_string(), Data::new());
+                let _ = dir.children.try_insert(n.to_string(), Directory::new());
             }
             (s, _) => sum += s.parse::<usize>().unwrap(),
         }
@@ -62,7 +64,7 @@ fn create_directories(dir: &mut Data, lines: &mut Lines) -> usize {
 
 pub(crate) fn part2(text: &str) -> usize {
     let mut lines = text.lines();
-    let mut dummy = Data::new();
+    let mut dummy = Directory::new();
     create_directories(&mut dummy, &mut lines);
     let space_needed = 30_000_000 - (70_000_000 - dummy.size);
     let mut min = usize::MAX;
@@ -70,9 +72,9 @@ pub(crate) fn part2(text: &str) -> usize {
     min
 }
 
-fn find_min(dir: &Data, space_needed: &usize, min: &mut usize) {
-    for (_, child) in dir.children.iter() {
-        if child.size >= *space_needed && child.size < *min {
+fn find_min(dir: &Directory, space_needed: &usize, min: &mut usize) {
+    for (_, child) in dir.children.iter().filter(|(_, c)| c.size >= *space_needed) {
+        if child.size < *min {
             *min = child.size;
         }
         find_min(child, space_needed, min);
