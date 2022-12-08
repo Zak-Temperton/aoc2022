@@ -1,3 +1,5 @@
+use std::ops::Range;
+
 pub(crate) fn part1(text: &str) -> usize {
     let mut forest = Vec::new();
     for line in text.lines() {
@@ -67,6 +69,34 @@ pub(crate) fn part1(text: &str) -> usize {
     count
 }
 
+fn look_across<R>(score: &mut usize, forest: &Vec<&[u8]>, y: usize, cur_tree: u8, range: R)
+where
+    R: DoubleEndedIterator<Item = usize>,
+{
+    let mut view = 0;
+    for x in range {
+        view += 1;
+        if forest[y][x] >= cur_tree {
+            break;
+        }
+    }
+    *score *= view;
+}
+
+fn look_verticle<R>(score: &mut usize, forest: &Vec<&[u8]>, x: usize, cur_tree: u8, range: R)
+where
+    R: DoubleEndedIterator<Item = usize>,
+{
+    let mut view = 0;
+    for y in range {
+        view += 1;
+        if forest[y][x] >= cur_tree {
+            break;
+        }
+    }
+    *score *= view;
+}
+
 pub(crate) fn part2(text: &str) -> usize {
     let mut forest = Vec::new();
     for line in text.lines() {
@@ -74,44 +104,17 @@ pub(crate) fn part2(text: &str) -> usize {
     }
     let height = forest.len();
     let width = forest[0].len();
+
     let mut max_score = 0;
     for y in 1..height - 1 {
         for x in 1..width - 1 {
             let mut score = 1;
             let cur_tree = forest[y][x];
-            let mut view = 0;
 
-            for x in (0..x).rev() {
-                view += 1;
-                if forest[y][x] >= cur_tree {
-                    break;
-                }
-            }
-            score *= view;
-            view = 0;
-            for x in x + 1..width {
-                view += 1;
-                if forest[y][x] >= cur_tree {
-                    break;
-                }
-            }
-            score *= view;
-            view = 0;
-            for y in (0..y).rev() {
-                view += 1;
-                if forest[y][x] >= cur_tree {
-                    break;
-                }
-            }
-            score *= view;
-            view = 0;
-            for y in y + 1..height {
-                view += 1;
-                if forest[y][x] >= cur_tree {
-                    break;
-                }
-            }
-            score *= view;
+            look_across(&mut score, &forest, y, cur_tree, (0..x).rev());
+            look_across(&mut score, &forest, y, cur_tree, x + 1..width);
+            look_verticle(&mut score, &forest, x, cur_tree, (0..y).rev());
+            look_verticle(&mut score, &forest, x, cur_tree, y + 1..height);
 
             if score > max_score {
                 max_score = score;
