@@ -51,19 +51,14 @@ pub(crate) fn part1(text: &str) -> usize {
     for line in text.lines() {
         forest.push(line.as_bytes());
     }
-    let height = forest.len();
-    let width = forest[0].len();
-    let mut visible = vec![vec![false; width]; height];
+    let side = forest.len();
+    let mut visible = vec![vec![false; side]; side];
     let mut count = 0;
-    for y in 0..height {
-        let range = 0..width;
-        visible_sides(range.clone(), &forest, y, &mut visible, &mut count);
-        visible_sides(range.rev(), &forest, y, &mut visible, &mut count);
-    }
-    for x in 0..width {
-        let range = 0..height;
-        visibile_surface(range.clone(), &forest, x, &mut visible, &mut count);
-        visibile_surface(range.rev(), &forest, x, &mut visible, &mut count);
+    for i in 0..side {
+        visible_sides(0..side, &forest, i, &mut visible, &mut count);
+        visible_sides((0..side).rev(), &forest, i, &mut visible, &mut count);
+        visibile_surface(0..side, &forest, i, &mut visible, &mut count);
+        visibile_surface((0..side).rev(), &forest, i, &mut visible, &mut count);
     }
     count
 }
@@ -101,19 +96,18 @@ pub(crate) fn part2(text: &str) -> usize {
     for line in text.lines() {
         forest.push(line.as_bytes());
     }
-    let height = forest.len();
-    let width = forest[0].len();
+    let side = forest.len();
 
     let mut max_score = 0;
-    for y in 1..height - 1 {
-        for x in 1..width - 1 {
+    for y in 1..side - 1 {
+        for x in 1..side - 1 {
             let mut score = 1;
             let cur_tree = forest[y][x];
 
             look_across(&mut score, &forest, y, cur_tree, (0..x).rev());
-            look_across(&mut score, &forest, y, cur_tree, x + 1..width);
+            look_across(&mut score, &forest, y, cur_tree, x + 1..side);
             look_verticle(&mut score, &forest, x, cur_tree, (0..y).rev());
-            look_verticle(&mut score, &forest, x, cur_tree, y + 1..height);
+            look_verticle(&mut score, &forest, x, cur_tree, y + 1..side);
 
             if score > max_score {
                 max_score = score;
