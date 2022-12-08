@@ -61,7 +61,7 @@ pub(crate) fn part1(text: &str) -> usize {
         visible_sides(range.rev(), &forest, y, &mut visible, &mut count);
     }
     for x in 0..width {
-        let range = 0..width;
+        let range = 0..height;
         visibile_surface(range.clone(), &forest, x, &mut visible, &mut count);
         visibile_surface(range.rev(), &forest, x, &mut visible, &mut count);
     }
