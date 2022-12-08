@@ -1,4 +1,50 @@
-use std::ops::Range;
+fn visible_sides<R>(
+    range: R,
+    forest: &Vec<&[u8]>,
+    y: usize,
+    visible: &mut Vec<Vec<bool>>,
+    count: &mut usize,
+) where
+    R: DoubleEndedIterator<Item = usize>,
+{
+    let mut highest = 0;
+    for x in range {
+        if forest[y][x] > highest {
+            highest = forest[y][x];
+            if !visible[y][x] {
+                visible[y][x] = true;
+                *count += 1;
+            }
+            if highest == b'9' {
+                break;
+            }
+        }
+    }
+}
+
+fn visibile_surface<R>(
+    range: R,
+    forest: &Vec<&[u8]>,
+    x: usize,
+    visible: &mut Vec<Vec<bool>>,
+    count: &mut usize,
+) where
+    R: DoubleEndedIterator<Item = usize>,
+{
+    let mut highest = 0;
+    for y in range {
+        if forest[y][x] > highest {
+            highest = forest[y][x];
+            if !visible[y][x] {
+                visible[y][x] = true;
+                *count += 1;
+            }
+            if highest == b'9' {
+                break;
+            }
+        }
+    }
+}
 
 pub(crate) fn part1(text: &str) -> usize {
     let mut forest = Vec::new();
@@ -9,62 +55,15 @@ pub(crate) fn part1(text: &str) -> usize {
     let width = forest[0].len();
     let mut visible = vec![vec![false; width]; height];
     let mut count = 0;
-    let mut highest;
     for y in 0..height {
-        highest = 0;
-        for x in 0..width {
-            if forest[y][x] > highest {
-                highest = forest[y][x];
-                if !visible[y][x] {
-                    visible[y][x] = true;
-                    count += 1;
-                }
-                if highest == b'9' {
-                    break;
-                }
-            }
-        }
-        highest = 0;
-        for x in (0..width).rev() {
-            if forest[y][x] > highest {
-                highest = forest[y][x];
-                if !visible[y][x] {
-                    visible[y][x] = true;
-                    count += 1;
-                }
-                if highest == b'9' {
-                    break;
-                }
-            }
-        }
+        let range = 0..width;
+        visible_sides(range.clone(), &forest, y, &mut visible, &mut count);
+        visible_sides(range.rev(), &forest, y, &mut visible, &mut count);
     }
     for x in 0..width {
-        highest = 0;
-        for y in 0..height {
-            if forest[y][x] > highest {
-                highest = forest[y][x];
-                if !visible[y][x] {
-                    visible[y][x] = true;
-                    count += 1;
-                }
-                if highest == b'9' {
-                    break;
-                }
-            }
-        }
-        highest = 0;
-        for y in (0..height).rev() {
-            if forest[y][x] > highest {
-                highest = forest[y][x];
-                if !visible[y][x] {
-                    visible[y][x] = true;
-                    count += 1;
-                }
-                if highest == b'9' {
-                    break;
-                }
-            }
-        }
+        let range = 0..width;
+        visibile_surface(range.clone(), &forest, x, &mut visible, &mut count);
+        visibile_surface(range.rev(), &forest, x, &mut visible, &mut count);
     }
     count
 }
