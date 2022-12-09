@@ -12,3 +12,4 @@ My solutions to Advent of Code 2022 in Rust
 | 06  | [Tuning Trouble](https://adventofcode.com/2022/day/6)          | [day06.rs](src/solutions/day06.rs) |
 | 07  | [No Space Left On Device](https://adventofcode.com/2022/day/7) | [day07.rs](src/solutions/day07.rs) |
 | 08  | [Treetop Tree House](https://adventofcode.com/2022/day/8)      | [day08.rs](src/solutions/day08.rs) |
+| 09  | [Rope Bridge](https://adventofcode.com/2022/day/9)             | [day09.rs](src/solutions/day09.rs) |
