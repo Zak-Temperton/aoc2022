@@ -1,10 +1,9 @@
-use std::collections::HashSet;
-
 pub(crate) fn part1(text: &str) -> usize {
-    let mut head = (0, 0);
-    let mut tail = (0, 0);
-    let mut visited_by_tail = HashSet::new();
-    visited_by_tail.insert(tail);
+    let mut head = (300, 300);
+    let mut tail = (300, 300);
+    let mut visited = [[false; 600]; 600];
+    visited[tail.0 as usize][tail.1 as usize] = true;
+    let mut count = 0;
     for line in text.lines() {
         let dir = line.as_bytes()[0];
         let steps = line[2..].parse::<i32>().unwrap();
@@ -15,6 +14,7 @@ pub(crate) fn part1(text: &str) -> usize {
             b'R' => head.0 += steps,
             _ => unreachable!(),
         }
+
         let mut x_dif;
         let mut y_dif;
         while {
@@ -24,16 +24,21 @@ pub(crate) fn part1(text: &str) -> usize {
         } {
             tail.0 += x_dif.signum();
             tail.1 += y_dif.signum();
-            visited_by_tail.insert(tail);
+            if !visited[tail.0 as usize][tail.1 as usize] {
+                visited[tail.0 as usize][tail.1 as usize] = true;
+                count += 1;
+            }
         }
     }
-    visited_by_tail.len()
+    count
 }
 
 pub(crate) fn part2(text: &str) -> usize {
-    let mut rope = [(0, 0); 10];
-    let mut visited_by_tail = HashSet::new();
-    visited_by_tail.insert((0, 0));
+    let mut rope = [(300, 300); 10];
+    let mut visited = [[false; 600]; 600];
+    visited[rope[9].0 as usize][rope[9].1 as usize] = true;
+
+    let mut count = 0;
     for line in text.lines() {
         let dir = line.as_bytes()[0];
         let steps = line[2..].parse::<i32>().unwrap();
@@ -68,12 +73,15 @@ pub(crate) fn part2(text: &str) -> usize {
             } {
                 rope[9].0 += x_dif.signum();
                 rope[9].1 += y_dif.signum();
-                visited_by_tail.insert(rope[9]);
+                if !visited[rope[9].0 as usize][rope[9].1 as usize] {
+                    visited[rope[9].0 as usize][rope[9].1 as usize] = true;
+                    count += 1;
+                }
                 settled = false;
             }
         }
     }
-    visited_by_tail.len()
+    count
 }
 
 #[allow(soft_unstable, unused_imports, dead_code)]
