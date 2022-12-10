@@ -1,4 +1,4 @@
-#![feature(test, map_try_insert)]
+#![feature(test, map_try_insert, int_abs_diff)]
 
 extern crate test;
 
@@ -28,7 +28,7 @@ fn main() {
         7 => day07(),
         8 => day08(),
         9 => day09(),
-        // 10 => day10(),
+        10 => day10(),
         // 11 => day11(),
         // 12 => day12(),
         // 13 => day13(),

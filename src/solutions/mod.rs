@@ -63,13 +63,16 @@ pub(crate) fn day09() {
     println!("{}", day09::part1(&text));
     println!("{}", day09::part2(&text));
 }
-// mod day10;
-// pub(crate) fn day10() {
-//     println!("day10:");
-//     let text = read_to_string("res/day10.txt").unwrap();
-//     println!("{}", day10::part1(&text));
-//     println!("{}", day10::part2(&text));
-// }
+mod day10;
+pub(crate) fn day10() {
+    println!("day10:");
+    let text = read_to_string("res/day10.txt").unwrap();
+    println!("{}", day10::part1(&text));
+    let sprite = day10::part2(&text);
+    for l in sprite {
+        println!("{}", String::from_utf8(l).unwrap());
+    }
+}
 // mod day11;
 // pub(crate) fn day11() {
 //     println!("day11:");
