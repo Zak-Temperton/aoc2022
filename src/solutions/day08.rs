@@ -1,6 +1,6 @@
 fn visible_sides<R>(
     range: R,
-    forest: &Vec<&[u8]>,
+    forest: &[&[u8]],
     y: usize,
     visible: &mut Vec<Vec<bool>>,
     count: &mut usize,
@@ -24,7 +24,7 @@ fn visible_sides<R>(
 
 fn visibile_surface<R>(
     range: R,
-    forest: &Vec<&[u8]>,
+    forest: &[&[u8]],
     x: usize,
     visible: &mut Vec<Vec<bool>>,
     count: &mut usize,
@@ -63,7 +63,7 @@ pub(crate) fn part1(text: &str) -> usize {
     count
 }
 
-fn look_across<R>(score: &mut usize, forest: &Vec<&[u8]>, y: usize, cur_tree: u8, range: R)
+fn look_across<R>(score: &mut usize, forest: &[&[u8]], y: usize, cur_tree: u8, range: R)
 where
     R: DoubleEndedIterator<Item = usize>,
 {
@@ -77,7 +77,7 @@ where
     *score *= view;
 }
 
-fn look_verticle<R>(score: &mut usize, forest: &Vec<&[u8]>, x: usize, cur_tree: u8, range: R)
+fn look_verticle<R>(score: &mut usize, forest: &[&[u8]], x: usize, cur_tree: u8, range: R)
 where
     R: DoubleEndedIterator<Item = usize>,
 {
