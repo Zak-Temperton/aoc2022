@@ -28,7 +28,7 @@ fn create_directories(dir: &mut Directory, lines: &mut Lines) -> usize {
                     sum += create_directories(
                         dir.children
                             .entry(n.to_string())
-                            .or_insert(Directory::new()),
+                            .or_insert_with(Directory::new),
                         lines,
                     )
                 }
