@@ -43,15 +43,15 @@ pub(crate) fn part2(text: &str) -> Vec<Vec<u8>> {
     let mut x = 1;
     let mut y = 0;
 
-    for line in text.lines() {
+    for line in text.split_whitespace() {
         match &line[..1] {
-            "n" => draw(&mut sprite, &mut cycle, &x, &mut y),
-            "a" => {
+            "n" | "a" => {
                 draw(&mut sprite, &mut cycle, &x, &mut y);
-                draw(&mut sprite, &mut cycle, &x, &mut y);
-                x += line[5..].parse::<i32>().unwrap();
             }
-            _ => {}
+            _ => {
+                draw(&mut sprite, &mut cycle, &x, &mut y);
+                x += line.parse::<i32>().unwrap();
+            }
         }
     }
     sprite
