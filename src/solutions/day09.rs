@@ -15,19 +15,17 @@ pub(crate) fn part1(text: &str) -> usize {
             _ => unreachable!(),
         }
 
-        let mut x_dif;
-        let mut y_dif;
-        while {
-            x_dif = head.0 - tail.0;
-            y_dif = head.1 - tail.1;
-            x_dif.abs() > 1 || y_dif.abs() > 1
-        } {
+        let mut x_dif = head.0 - tail.0;
+        let mut y_dif = head.1 - tail.1;
+        while x_dif.abs() > 1 || y_dif.abs() > 1 {
             tail.0 += x_dif.signum();
             tail.1 += y_dif.signum();
             if !visited[tail.0 as usize][tail.1 as usize] {
                 visited[tail.0 as usize][tail.1 as usize] = true;
                 count += 1;
             }
+            x_dif = head.0 - tail.0;
+            y_dif = head.1 - tail.1;
         }
     }
     count
@@ -56,21 +54,17 @@ pub(crate) fn part2(text: &str) -> usize {
         while !settled {
             settled = true;
             for i in 0..8 {
-                if {
-                    x_dif = rope[i].0 - rope[i + 1].0;
-                    y_dif = rope[i].1 - rope[i + 1].1;
-                    x_dif.abs() > 1 || y_dif.abs() > 1
-                } {
+                x_dif = rope[i].0 - rope[i + 1].0;
+                y_dif = rope[i].1 - rope[i + 1].1;
+                if x_dif.abs() > 1 || y_dif.abs() > 1 {
                     rope[i + 1].0 += x_dif.signum();
                     rope[i + 1].1 += y_dif.signum();
                     settled = false;
                 }
             }
-            if {
-                x_dif = rope[8].0 - rope[9].0;
-                y_dif = rope[8].1 - rope[9].1;
-                x_dif.abs() > 1 || y_dif.abs() > 1
-            } {
+            x_dif = rope[8].0 - rope[9].0;
+            y_dif = rope[8].1 - rope[9].1;
+            if x_dif.abs() > 1 || y_dif.abs() > 1 {
                 rope[9].0 += x_dif.signum();
                 rope[9].1 += y_dif.signum();
                 if !visited[rope[9].0 as usize][rope[9].1 as usize] {
