@@ -25,7 +25,7 @@ fn get_params(line: &str, stacks: &[Vec<char>]) -> (usize, usize, usize, usize) 
 fn get_result(stacks: Vec<Vec<char>>) -> String {
     let mut res = String::new();
     for s in stacks {
-        res.push(*(s.last().unwrap()) as char);
+        res.push(*(s.last().unwrap()));
     }
     res
 }

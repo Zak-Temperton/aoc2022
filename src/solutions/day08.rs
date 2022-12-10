@@ -2,7 +2,7 @@ fn visible_sides<R>(
     range: R,
     forest: &[&[u8]],
     y: usize,
-    visible: &mut Vec<Vec<bool>>,
+    visible: &mut [Vec<bool>],
     count: &mut usize,
 ) where
     R: DoubleEndedIterator<Item = usize>,
@@ -26,7 +26,7 @@ fn visibile_surface<R>(
     range: R,
     forest: &[&[u8]],
     x: usize,
-    visible: &mut Vec<Vec<bool>>,
+    visible: &mut [Vec<bool>],
     count: &mut usize,
 ) where
     R: DoubleEndedIterator<Item = usize>,

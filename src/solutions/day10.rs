@@ -26,7 +26,7 @@ pub(crate) fn part1(text: &str) -> i32 {
     sum
 }
 
-fn draw(sprite: &mut Vec<Vec<u8>>, cycle: &mut usize, x: &i32, y: &mut usize) {
+fn draw(sprite: &mut [Vec<u8>], cycle: &mut usize, x: &i32, y: &mut usize) {
     if (*cycle as i32).abs_diff(*x) <= 1 {
         sprite[*y][*cycle] = b'#';
     }
