@@ -1,4 +1,4 @@
-#![feature(test, map_try_insert, int_abs_diff)]
+#![feature(test, map_try_insert)]
 
 extern crate test;
 
