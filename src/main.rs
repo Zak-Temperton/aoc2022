@@ -1,4 +1,4 @@
-#![feature(test, map_try_insert, iter_array_chunks)]
+#![feature(test, map_try_insert, iter_array_chunks, iter_next_chunk)]
 
 extern crate test;
 

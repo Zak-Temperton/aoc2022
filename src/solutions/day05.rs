@@ -1,7 +1,6 @@
 fn setup(lines: &mut std::str::Lines) -> Vec<Vec<char>> {
     let mut stacks = vec![Vec::new(); 9];
-    for _ in 0..8 {
-        let line = lines.next().unwrap();
+    for line in lines.next_chunk::<8>().unwrap().iter().rev() {
         line.chars()
             .skip(1)
             .step_by(4)
@@ -9,7 +8,6 @@ fn setup(lines: &mut std::str::Lines) -> Vec<Vec<char>> {
             .filter(|(_, c)| *c != ' ')
             .for_each(|(i, c)| stacks[i].push(c))
     }
-    stacks.iter_mut().for_each(|v| v.reverse());
     stacks
 }
 
