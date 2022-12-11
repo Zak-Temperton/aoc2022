@@ -1,8 +1,6 @@
-use std::collections::VecDeque;
-
 #[derive(Debug)]
 struct Monkey {
-    items: VecDeque<usize>,
+    items: Vec<usize>,
     operation: (Operation, Option<usize>),
     test: usize,
     if_true: usize,
@@ -44,41 +42,14 @@ impl Monkey {
             inspections: 0,
         }
     }
-}
 
-pub(crate) fn part1(text: &str) -> usize {
-    let mut monkeys = Vec::new();
-    for lines in text.lines().array_chunks::<7>() {
-        monkeys.push(Monkey::new(lines));
-    }
-    for _ in 0..20 {
-        for m in 0..monkeys.len() {
-            monkeys[m].inspections += monkeys[m].items.len();
-            let operation = monkeys[m].operation;
-            while !monkeys[m].items.is_empty() {
-                let mut item = monkeys[m].items[0];
-                let val = match operation.1 {
-                    None => item,
-                    Some(n) => n,
-                };
-                item = match operation.0 {
-                    Operation::Mul => item * val,
-                    Operation::Div => item / val,
-                    Operation::Add => item + val,
-                    Operation::Sub => item - val,
-                } / 3;
-
-                let target = if item % monkeys[m].test == 0 {
-                    monkeys[m].if_true
-                } else {
-                    monkeys[m].if_false
-                };
-                monkeys[m].items.pop_front().unwrap();
-                monkeys[target].items.push_back(item);
-            }
+    fn test(&self, item: usize) -> usize {
+        if item % self.test == 0 {
+            self.if_true
+        } else {
+            self.if_false
         }
     }
-    calc_monkey_business(monkeys)
 }
 
 fn calc_monkey_business(monkeys: Vec<Monkey>) -> usize {
@@ -97,6 +68,37 @@ fn calc_monkey_business(monkeys: Vec<Monkey>) -> usize {
     max1 * max2
 }
 
+pub(crate) fn part1(text: &str) -> usize {
+    let mut monkeys = Vec::new();
+    for lines in text.lines().array_chunks::<7>() {
+        monkeys.push(Monkey::new(lines));
+    }
+    for _ in 0..20 {
+        for m in 0..monkeys.len() {
+            let operation = monkeys[m].operation;
+            monkeys[m].inspections += monkeys[m].items.len();
+            for i in 0..monkeys[m].items.len() {
+                let mut item = monkeys[m].items[i];
+                let val = match operation.1 {
+                    None => item,
+                    Some(n) => n,
+                };
+                item = match operation.0 {
+                    Operation::Mul => item * val,
+                    Operation::Div => item / val,
+                    Operation::Add => item + val,
+                    Operation::Sub => item - val,
+                } / 3;
+
+                let target = monkeys[m].test(item);
+                monkeys[target].items.push(item);
+            }
+            monkeys[m].items.clear();
+        }
+    }
+    calc_monkey_business(monkeys)
+}
+
 pub(crate) fn part2(text: &str) -> usize {
     let mut monkeys = Vec::new();
     let mut multiple = 1;
@@ -108,8 +110,8 @@ pub(crate) fn part2(text: &str) -> usize {
         for m in 0..monkeys.len() {
             let operation = monkeys[m].operation;
             monkeys[m].inspections += monkeys[m].items.len();
-            while !monkeys[m].items.is_empty() {
-                let mut item = monkeys[m].items[0];
+            for i in 0..monkeys[m].items.len() {
+                let mut item = monkeys[m].items[i];
                 let val = match operation.1 {
                     None => item,
                     Some(n) => n,
@@ -121,14 +123,10 @@ pub(crate) fn part2(text: &str) -> usize {
                     Operation::Sub => item - val,
                 } % multiple;
 
-                let target = if item % monkeys[m].test == 0 {
-                    monkeys[m].if_true
-                } else {
-                    monkeys[m].if_false
-                };
-                monkeys[m].items.pop_front().unwrap();
-                monkeys[target].items.push_back(item);
+                let target = monkeys[m].test(item);
+                monkeys[target].items.push(item);
             }
+            monkeys[m].items.clear();
         }
     }
     calc_monkey_business(monkeys)
