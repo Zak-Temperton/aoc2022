@@ -3,7 +3,7 @@ use std::collections::VecDeque;
 #[derive(Debug)]
 struct Monkey {
     items: VecDeque<usize>,
-    operation: (Option<usize>, Operation, Option<usize>),
+    operation: (Operation, Option<usize>),
     test: usize,
     iftrue: usize,
     iffalse: usize,
@@ -23,12 +23,8 @@ impl Monkey {
         Monkey {
             items: lines[1][18..].split(", ").flat_map(|s| s.parse()).collect(),
             operation: {
-                let mut split = lines[2][19..].split_whitespace();
+                let mut split = lines[2][23..].split_whitespace();
                 (
-                    match split.next().unwrap() {
-                        "old" => None,
-                        c => Some(c.parse().unwrap()),
-                    },
                     match split.next().unwrap() {
                         "*" => Operation::Mul,
                         "/" => Operation::Div,
@@ -61,19 +57,15 @@ pub(crate) fn part1(text: &str) -> usize {
             let operation = monkeys[m].operation.clone();
             while !monkeys[m].items.is_empty() {
                 let mut item = monkeys[m].items[0];
-                let val1 = match operation.0 {
+                let val = match operation.1 {
                     None => item,
                     Some(n) => n,
                 };
-                let val2 = match operation.2 {
-                    None => item,
-                    Some(n) => n,
-                };
-                item = match operation.1 {
-                    Operation::Mul => val1 * val2,
-                    Operation::Div => val1 / val2,
-                    Operation::Add => val1 + val2,
-                    Operation::Sub => val1 - val2,
+                item = match operation.0 {
+                    Operation::Mul => item * val,
+                    Operation::Div => item / val,
+                    Operation::Add => item + val,
+                    Operation::Sub => item - val,
                 } / 3;
 
                 let target = if item % monkeys[m].test == 0 {
@@ -118,19 +110,15 @@ pub(crate) fn part2(text: &str) -> usize {
             monkeys[m].inspections += monkeys[m].items.len();
             while !monkeys[m].items.is_empty() {
                 let mut item = monkeys[m].items[0];
-                let val1 = match operation.0 {
+                let val = match operation.1 {
                     None => item,
                     Some(n) => n,
                 };
-                let val2 = match operation.2 {
-                    None => item,
-                    Some(n) => n,
-                };
-                item = match operation.1 {
-                    Operation::Mul => val1 * val2,
-                    Operation::Div => val1 / val2,
-                    Operation::Add => val1 + val2,
-                    Operation::Sub => val1 - val2,
+                item = match operation.0 {
+                    Operation::Mul => item * val,
+                    Operation::Div => item / val,
+                    Operation::Add => item + val,
+                    Operation::Sub => item - val,
                 } % multiple;
 
                 let target = if item % monkeys[m].test == 0 {
