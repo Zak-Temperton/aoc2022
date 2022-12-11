@@ -5,8 +5,8 @@ struct Monkey {
     items: VecDeque<usize>,
     operation: (Operation, Option<usize>),
     test: usize,
-    iftrue: usize,
-    iffalse: usize,
+    if_true: usize,
+    if_false: usize,
     inspections: usize,
 }
 
@@ -39,8 +39,8 @@ impl Monkey {
                 )
             },
             test: lines[3][21..].parse().unwrap(),
-            iftrue: lines[4][29..].parse().unwrap(),
-            iffalse: lines[5][30..].parse().unwrap(),
+            if_true: lines[4][29..].parse().unwrap(),
+            if_false: lines[5][30..].parse().unwrap(),
             inspections: 0,
         }
     }
@@ -69,9 +69,9 @@ pub(crate) fn part1(text: &str) -> usize {
                 } / 3;
 
                 let target = if item % monkeys[m].test == 0 {
-                    monkeys[m].iftrue
+                    monkeys[m].if_true
                 } else {
-                    monkeys[m].iffalse
+                    monkeys[m].if_false
                 };
                 monkeys[m].items.pop_front().unwrap();
                 monkeys[target].items.push_back(item);
@@ -122,9 +122,9 @@ pub(crate) fn part2(text: &str) -> usize {
                 } % multiple;
 
                 let target = if item % monkeys[m].test == 0 {
-                    monkeys[m].iftrue
+                    monkeys[m].if_true
                 } else {
-                    monkeys[m].iffalse
+                    monkeys[m].if_false
                 };
                 monkeys[m].items.pop_front().unwrap();
                 monkeys[target].items.push_back(item);
