@@ -3,20 +3,45 @@ use std::collections::VecDeque;
 #[derive(Debug)]
 struct Monkey {
     items: VecDeque<usize>,
-    operation: Vec<String>,
+    operation: (Option<usize>, Operation, Option<usize>),
     test: usize,
     iftrue: usize,
     iffalse: usize,
     inspections: usize,
 }
+
+#[derive(Debug, Clone, Copy)]
+enum Operation {
+    Mul,
+    Div,
+    Add,
+    Sub,
+}
+
 impl Monkey {
     fn new(lines: [&str; 7]) -> Monkey {
         Monkey {
             items: lines[1][18..].split(", ").flat_map(|s| s.parse()).collect(),
-            operation: lines[2][19..]
-                .split_whitespace()
-                .map(|s| s.to_string())
-                .collect(),
+            operation: {
+                let mut split = lines[2][19..].split_whitespace();
+                (
+                    match split.next().unwrap() {
+                        "old" => None,
+                        c => Some(c.parse().unwrap()),
+                    },
+                    match split.next().unwrap() {
+                        "*" => Operation::Mul,
+                        "/" => Operation::Div,
+                        "+" => Operation::Add,
+                        "-" => Operation::Sub,
+                        _ => panic!(),
+                    },
+                    match split.next().unwrap() {
+                        "old" => None,
+                        c => Some(c.parse().unwrap()),
+                    },
+                )
+            },
             test: lines[3][21..].parse().unwrap(),
             iftrue: lines[4][29..].parse().unwrap(),
             iffalse: lines[5][30..].parse().unwrap(),
@@ -35,28 +60,28 @@ pub(crate) fn part1(text: &str) -> usize {
             monkeys[m].inspections += monkeys[m].items.len();
             let operation = monkeys[m].operation.clone();
             while !monkeys[m].items.is_empty() {
-                let val1 = match operation[0].as_str() {
-                    "old" => monkeys[m].items[0],
-                    c => c.parse().unwrap(),
+                let mut item = monkeys[m].items[0];
+                let val1 = match operation.0 {
+                    None => item,
+                    Some(n) => n,
                 };
-                let val2 = match operation[2].as_str() {
-                    "old" => monkeys[m].items[0],
-                    c => c.parse().unwrap(),
+                let val2 = match operation.2 {
+                    None => item,
+                    Some(n) => n,
                 };
-                monkeys[m].items[0] = match operation[1].as_str() {
-                    "*" => val1 * val2,
-                    "/" => val1 / val2,
-                    "+" => val1 + val2,
-                    "-" => val1 - val2,
-                    _ => 1,
+                item = match operation.1 {
+                    Operation::Mul => val1 * val2,
+                    Operation::Div => val1 / val2,
+                    Operation::Add => val1 + val2,
+                    Operation::Sub => val1 - val2,
                 } / 3;
 
-                let target = if monkeys[m].items[0] % monkeys[m].test == 0 {
+                let target = if item % monkeys[m].test == 0 {
                     monkeys[m].iftrue
                 } else {
                     monkeys[m].iffalse
                 };
-                let item = monkeys[m].items.pop_front().unwrap();
+                monkeys[m].items.pop_front().unwrap();
                 monkeys[target].items.push_back(item);
             }
         }
@@ -89,23 +114,23 @@ pub(crate) fn part2(text: &str) -> usize {
     }
     for _ in 0..10000 {
         for m in 0..monkeys.len() {
-            let operation = monkeys[m].operation.clone();
+            let operation = monkeys[m].operation;
             monkeys[m].inspections += monkeys[m].items.len();
             while !monkeys[m].items.is_empty() {
-                let val1 = match operation[0].as_str() {
-                    "old" => monkeys[m].items[0],
-                    c => c.parse().unwrap(),
+                let mut item = monkeys[m].items[0];
+                let val1 = match operation.0 {
+                    None => item,
+                    Some(n) => n,
                 };
-                let val2 = match operation[2].as_str() {
-                    "old" => monkeys[m].items[0],
-                    c => c.parse().unwrap(),
+                let val2 = match operation.2 {
+                    None => item,
+                    Some(n) => n,
                 };
-                let item = match operation[1].as_str() {
-                    "*" => val1 * val2,
-                    "/" => val1 / val2,
-                    "+" => val1 + val2,
-                    "-" => val1 - val2,
-                    _ => panic!(),
+                item = match operation.1 {
+                    Operation::Mul => val1 * val2,
+                    Operation::Div => val1 / val2,
+                    Operation::Add => val1 + val2,
+                    Operation::Sub => val1 - val2,
                 } % multiple;
 
                 let target = if item % monkeys[m].test == 0 {
