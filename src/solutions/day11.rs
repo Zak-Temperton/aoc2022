@@ -54,7 +54,7 @@ pub(crate) fn part1(text: &str) -> usize {
     for _ in 0..20 {
         for m in 0..monkeys.len() {
             monkeys[m].inspections += monkeys[m].items.len();
-            let operation = monkeys[m].operation.clone();
+            let operation = monkeys[m].operation;
             while !monkeys[m].items.is_empty() {
                 let mut item = monkeys[m].items[0];
                 let val = match operation.1 {
