@@ -14,3 +14,4 @@ My solutions to Advent of Code 2022 in Rust
 | 08  | [Treetop Tree House](https://adventofcode.com/2022/day/8)      | [day08.rs](src/solutions/day08.rs) |
 | 09  | [Rope Bridge](https://adventofcode.com/2022/day/9)             | [day09.rs](src/solutions/day09.rs) |
 | 10  | [Cathode-Ray Tube](https://adventofcode.com/2022/day/10)       | [day10.rs](src/solutions/day10.rs) |
+| 11  | [Monkey in the Middle](https://adventofcode.com/2022/day/11)   | [day11.rs](src/solutions/day11.rs) |

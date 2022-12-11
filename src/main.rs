@@ -1,4 +1,4 @@
-#![feature(test, map_try_insert)]
+#![feature(test, map_try_insert, iter_array_chunks)]
 
 extern crate test;
 
@@ -29,7 +29,7 @@ fn main() {
         8 => day08(),
         9 => day09(),
         10 => day10(),
-        // 11 => day11(),
+        11 => day11(),
         // 12 => day12(),
         // 13 => day13(),
         // 14 => day14(),
