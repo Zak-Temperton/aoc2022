@@ -1,3 +1,42 @@
+fn init_map(text: &str) -> (Vec<Vec<u8>>, (usize, usize), (usize, usize)) {
+    let mut map = Vec::new();
+    let mut start = (0, 0);
+    let mut end = (0, 0);
+    for (y, line) in text.lines().enumerate() {
+        let mut bytes = line.as_bytes().to_vec();
+        for (x, b) in bytes.iter_mut().enumerate() {
+            if *b == b'S' {
+                *b = b'a';
+                start = (x, y);
+            } else if *b == b'E' {
+                *b = b'z';
+                end = (x, y);
+            }
+        }
+        map.push(bytes);
+    }
+    (map, start, end)
+}
+
+fn test_cell(
+    map: &[Vec<u8>],
+    cell: &(usize, usize),
+    new_pos: (usize, usize),
+    cells: &mut [Vec<bool>],
+    end: (usize, usize),
+    steps: usize,
+    new: &mut Vec<(usize, usize)>,
+) -> Option<usize> {
+    if map[cell.1][cell.0] + 1 >= map[new_pos.1][new_pos.0] && !cells[new_pos.1][new_pos.0] {
+        if new_pos == end {
+            return Some(steps);
+        }
+        cells[new_pos.1][new_pos.0] = true;
+        new.push(new_pos);
+    }
+    None
+}
+
 fn bfs(
     map: &[Vec<u8>],
     mut start: Vec<(usize, usize)>,
@@ -12,26 +51,16 @@ fn bfs(
             for cell in start.iter() {
                 if !(cell.0 == 0 && i == -1 || cell.0 == map[0].len() - 1 && i == 1) {
                     let new_pos = ((cell.0 as isize + i) as usize, cell.1);
-                    if map[cell.1][cell.0] + 1 >= map[new_pos.1][new_pos.0]
-                        && !cells[new_pos.1][new_pos.0]
+                    if let Some(value) = test_cell(map, cell, new_pos, cells, end, steps, &mut new)
                     {
-                        if new_pos == end {
-                            return steps;
-                        }
-                        cells[new_pos.1][new_pos.0] = true;
-                        new.push(new_pos);
+                        return value;
                     }
                 }
                 if !(cell.1 == 0 && i == -1 || cell.1 == map.len() - 1 && i == 1) {
                     let new_pos = (cell.0, (cell.1 as isize + i) as usize);
-                    if map[cell.1][cell.0] + 1 >= map[new_pos.1][new_pos.0]
-                        && !cells[new_pos.1][new_pos.0]
+                    if let Some(value) = test_cell(map, cell, new_pos, cells, end, steps, &mut new)
                     {
-                        if new_pos == end {
-                            return steps;
-                        }
-                        cells[new_pos.1][new_pos.0] = true;
-                        new.push(new_pos);
+                        return value;
                     }
                 }
             }
@@ -41,48 +70,21 @@ fn bfs(
     panic!("No path found")
 }
 
-pub(crate) fn part1(text: &str) -> usize {
-    let mut map = Vec::new();
-    let mut start = (0, 0);
-    let mut end = (0, 0);
-    for (y, line) in text.lines().enumerate() {
-        let mut bytes = line.as_bytes().to_vec();
-        for (x, b) in bytes.iter_mut().enumerate() {
-            if *b == b'S' {
-                *b = b'a';
-                start = (x, y);
-            } else if *b == b'E' {
-                *b = b'z';
-                end = (x, y);
-            }
+fn test_cell_b(
+    cells: &mut [Vec<bool>],
+    new_pos: (usize, usize),
+    map: &[Vec<u8>],
+    starts: &mut Vec<(usize, usize)>,
+    new: &mut Vec<(usize, usize)>,
+) {
+    if !cells[new_pos.1][new_pos.0] {
+        cells[new_pos.1][new_pos.0] = true;
+        if map[new_pos.1][new_pos.0] == b'b' {
+            starts.push(new_pos);
+        } else if map[new_pos.1][new_pos.0] == b'a' {
+            new.push(new_pos);
         }
-        map.push(bytes);
     }
-    let mut cells = vec![vec![false; map[0].len()]; map.len()];
-    bfs(&map, vec![start], end, &mut cells)
-}
-
-pub(crate) fn part2(text: &str) -> usize {
-    let mut map = Vec::new();
-    let mut start = (0, 0);
-    let mut end = (0, 0);
-    for (y, line) in text.lines().enumerate() {
-        let mut bytes = line.as_bytes().to_vec();
-        for (x, b) in bytes.iter_mut().enumerate() {
-            if *b == b'S' {
-                *b = b'a';
-                start = (x, y);
-            } else if *b == b'E' {
-                *b = b'z';
-                end = (x, y);
-            }
-        }
-        map.push(bytes);
-    }
-    let mut cells = vec![vec![false; map[0].len()]; map.len()];
-
-    let starts = find_b(&map, vec![start], &mut cells);
-    bfs(&map, starts, end, &mut cells) + 1
 }
 
 fn find_b(
@@ -97,25 +99,11 @@ fn find_b(
             for cell in start.iter() {
                 if !(cell.0 == 0 && i == -1 || cell.0 == map[0].len() - 1 && i == 1) {
                     let new_pos = ((cell.0 as isize + i) as usize, cell.1);
-                    if !cells[new_pos.1][new_pos.0] {
-                        cells[new_pos.1][new_pos.0] = true;
-                        if map[new_pos.1][new_pos.0] == b'b' {
-                            starts.push(new_pos);
-                        } else if map[new_pos.1][new_pos.0] == b'a' {
-                            new.push(new_pos);
-                        }
-                    }
+                    test_cell_b(cells, new_pos, map, &mut starts, &mut new);
                 }
                 if !(cell.1 == 0 && i == -1 || cell.1 == map.len() - 1 && i == 1) {
                     let new_pos = (cell.0, (cell.1 as isize + i) as usize);
-                    if !cells[new_pos.1][new_pos.0] {
-                        cells[new_pos.1][new_pos.0] = true;
-                        if map[new_pos.1][new_pos.0] == b'b' {
-                            starts.push(new_pos);
-                        } else if map[new_pos.1][new_pos.0] == b'a' {
-                            new.push(new_pos);
-                        }
-                    }
+                    test_cell_b(cells, new_pos, map, &mut starts, &mut new);
                 }
             }
         }
@@ -123,6 +111,20 @@ fn find_b(
     }
     starts
 }
+
+pub(crate) fn part1(text: &str) -> usize {
+    let (map, start, end) = init_map(text);
+    let mut cells = vec![vec![false; map[0].len()]; map.len()];
+    bfs(&map, vec![start], end, &mut cells)
+}
+
+pub(crate) fn part2(text: &str) -> usize {
+    let (map, start, end) = init_map(text);
+    let mut cells = vec![vec![false; map[0].len()]; map.len()];
+    let starts = find_b(&map, vec![start], &mut cells);
+    bfs(&map, starts, end, &mut cells) + 1
+}
+
 #[allow(soft_unstable, unused_imports, dead_code)]
 mod bench {
     use super::*;
