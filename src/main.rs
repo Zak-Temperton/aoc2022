@@ -1,4 +1,10 @@
-#![feature(test, map_try_insert, iter_array_chunks, iter_next_chunk)]
+#![feature(
+    test,
+    map_try_insert,
+    iter_array_chunks,
+    iter_next_chunk,
+    linked_list_remove
+)]
 
 extern crate test;
 
@@ -30,7 +36,7 @@ fn main() {
         9 => day09(),
         10 => day10(),
         11 => day11(),
-        // 12 => day12(),
+        12 => day12(),
         // 13 => day13(),
         // 14 => day14(),
         // 15 => day15(),
