@@ -1,10 +1,4 @@
-#![feature(
-    test,
-    map_try_insert,
-    iter_array_chunks,
-    iter_next_chunk,
-    linked_list_remove
-)]
+#![feature(test, map_try_insert, iter_array_chunks, iter_next_chunk)]
 
 extern crate test;
 
