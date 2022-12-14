@@ -78,26 +78,25 @@ pub(crate) fn part2(text: &str) -> usize {
         }
     }
     floor += 2;
-    let mut count = 0;
-    'fill: loop {
-        let mut sand = (500, 0);
-        'settle: loop {
-            for c in [(0, 1), (-1, 1), (1, 1)] {
-                let new = (sand.0 + c.0, sand.1 + c.1);
-                if !cave.contains(&new) && new.1 != floor {
-                    sand = new;
-                    continue 'settle;
-                }
-            }
-            count += 1;
-            cave.insert(sand);
-            if sand.1 == 0 {
-                break 'fill;
-            }
-            break 'settle;
+    let mut count = 1;
+    add_sand((500, 0), floor, &mut cave, &mut count);
+    count
+}
+
+fn add_sand(
+    sand: (isize, isize),
+    floor: isize,
+    cave: &mut HashSet<(isize, isize)>,
+    count: &mut usize,
+) {
+    for c in [(0, 1), (-1, 1), (1, 1)] {
+        let new = (sand.0 + c.0, sand.1 + c.1);
+        if !cave.contains(&new) && new.1 != floor {
+            cave.insert(new);
+            *count += 1;
+            add_sand(new, floor, cave, count)
         }
     }
-    count
 }
 
 #[allow(soft_unstable, unused_imports, dead_code)]
