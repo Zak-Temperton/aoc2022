@@ -16,3 +16,4 @@ My solutions to Advent of Code 2022 in Rust
 | 10  | [Cathode-Ray Tube](https://adventofcode.com/2022/day/10)        | [day10.rs](src/solutions/day10.rs) |
 | 11  | [Monkey in the Middle](https://adventofcode.com/2022/day/11)    | [day11.rs](src/solutions/day11.rs) |
 | 12  | [Hill Climbing Algorithm](https://adventofcode.com/2022/day/12) | [day12.rs](src/solutions/day12.rs) |
+| 13  | [Distress Signal](https://adventofcode.com/2022/day/13)         | [day13.rs](src/solutions/day13.rs) |
