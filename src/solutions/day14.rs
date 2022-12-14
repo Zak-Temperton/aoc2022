@@ -1,5 +1,10 @@
 use std::collections::HashSet;
 
+fn get_pos(split: &mut std::str::Split<&str>) -> Option<(isize, isize)> {
+    let mut last = split.next()?.split(',');
+    Some((last.next()?.parse().unwrap(), last.next()?.parse().unwrap()))
+}
+
 pub(crate) fn part1(text: &str) -> usize {
     let mut cave = HashSet::new();
     let mut deepest = 0;
@@ -47,42 +52,6 @@ pub(crate) fn part1(text: &str) -> usize {
     count
 }
 
-fn get_pos(split: &mut std::str::Split<&str>) -> Option<(isize, isize)> {
-    let mut last = split.next()?.split(',');
-    Some((last.next()?.parse().unwrap(), last.next()?.parse().unwrap()))
-}
-
-pub(crate) fn part2(text: &str) -> usize {
-    let mut cave = HashSet::new();
-    let mut floor = 0;
-    for line in text.lines() {
-        let mut split = line.split(" -> ");
-        let mut last = get_pos(&mut split).unwrap();
-        if last.1 > floor {
-            floor = last.1;
-        }
-        while let Some(new) = get_pos(&mut split) {
-            if last.0 == new.0 {
-                if new.1 > floor {
-                    floor = new.1;
-                }
-                for y in (last.1.min(new.1))..=last.1.max(new.1) {
-                    cave.insert((last.0, y));
-                }
-            } else {
-                for x in (last.0.min(new.0))..=last.0.max(new.0) {
-                    cave.insert((x, last.1));
-                }
-            }
-            last = new;
-        }
-    }
-    floor += 2;
-    let mut count = 1;
-    add_sand((500, 0), floor, &mut cave, &mut count);
-    count
-}
-
 fn add_sand(
     sand: (isize, isize),
     floor: isize,
@@ -97,6 +66,36 @@ fn add_sand(
             add_sand(new, floor, cave, count)
         }
     }
+}
+
+pub(crate) fn part2(text: &str) -> usize {
+    let mut cave = HashSet::new();
+    let mut deepest = 0;
+    for line in text.lines() {
+        let mut split = line.split(" -> ");
+        let mut last = get_pos(&mut split).unwrap();
+        if last.1 > deepest {
+            deepest = last.1;
+        }
+        while let Some(new) = get_pos(&mut split) {
+            if last.0 == new.0 {
+                if new.1 > deepest {
+                    deepest = new.1;
+                }
+                for y in (last.1.min(new.1))..=last.1.max(new.1) {
+                    cave.insert((last.0, y));
+                }
+            } else {
+                for x in (last.0.min(new.0))..=last.0.max(new.0) {
+                    cave.insert((x, last.1));
+                }
+            }
+            last = new;
+        }
+    }
+    let mut count = 1;
+    add_sand((500, 0), deepest + 2, &mut cave, &mut count);
+    count
 }
 
 #[allow(soft_unstable, unused_imports, dead_code)]
