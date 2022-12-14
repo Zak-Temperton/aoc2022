@@ -131,23 +131,8 @@ pub(crate) fn part2(text: &str) -> usize {
     let high = 6;
     let mut low_index = 1;
     let mut high_index = 2;
-    for lines in text.lines().array_chunks::<3>() {
-        let left = Element::new_list(lines[0]);
-        let right = Element::new_list(lines[1]);
-        match left.first_val() {
-            None => {
-                low_index += 1;
-                high_index += 1
-            }
-            Some(v) if high > v => {
-                high_index += 1;
-                if low > v {
-                    low_index += 1;
-                }
-            }
-            _ => {}
-        }
-        match right.first_val() {
+    for line in text.split_whitespace() {
+        match Element::new_list(line).first_val() {
             None => {
                 low_index += 1;
                 high_index += 1
