@@ -8,36 +8,13 @@ enum Element {
 }
 
 impl Element {
-    pub fn new_list(line: &str) -> Element {
-        let mut element = Element::List(vec![Element::Empty]);
-        let mut bytes = line.bytes();
-        if let Element::List(list) = &mut element {
+    fn new_element(&mut self, bytes: &mut Bytes) {
+        *self = Element::List(vec![Element::Empty]);
+
+        if let Element::List(list) = self {
             while let Some(b) = bytes.next() {
                 match b {
-                    b'[' => Self::new_element(&mut bytes, list.last_mut().unwrap()),
-                    b']' => return element,
-                    b',' => list.push(Element::Empty),
-                    b if b.is_ascii_digit() => match list.last_mut() {
-                        Some(Element::Val(v)) => *v = *v * 10 + (b - b'0') as u32,
-                        Some(Element::Empty) => {
-                            *list.last_mut().unwrap() = Element::Val((b - b'0') as u32)
-                        }
-                        _ => panic!(),
-                    },
-                    _ => {}
-                }
-            }
-        }
-        element
-    }
-
-    fn new_element(bytes: &mut Bytes, element: &mut Element) {
-        *element = Element::List(vec![Element::Empty]);
-
-        if let Element::List(list) = element {
-            while let Some(b) = bytes.next() {
-                match b {
-                    b'[' => Self::new_element(bytes, list.last_mut().unwrap()),
+                    b'[' => list.last_mut().unwrap().new_element(bytes),
                     b']' => return,
                     b',' => list.push(Element::Empty),
                     b if b.is_ascii_digit() => match list.last_mut() {
@@ -117,8 +94,10 @@ impl PartialOrd for Element {
 pub(crate) fn part1(text: &str) -> usize {
     let mut sum = 0;
     for (i, lines) in text.lines().array_chunks::<3>().enumerate() {
-        let left = Element::new_list(lines[0]);
-        let right = Element::new_list(lines[1]);
+        let mut left = Element::Empty;
+        let mut right = Element::Empty;
+        left.new_element(&mut lines[0].bytes());
+        right.new_element(&mut lines[1].bytes());
         if left <= right {
             sum += i + 1;
         }
@@ -132,7 +111,9 @@ pub(crate) fn part2(text: &str) -> usize {
     let mut low_index = 1;
     let mut high_index = 2;
     for line in text.split_whitespace() {
-        match Element::new_list(line).first_val() {
+        let mut element = Element::Empty;
+        element.new_element(&mut line.bytes());
+        match element.first_val() {
             None => {
                 low_index += 1;
                 high_index += 1
