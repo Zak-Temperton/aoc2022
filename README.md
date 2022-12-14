@@ -17,3 +17,4 @@ My solutions to Advent of Code 2022 in Rust
 | 11  | [Monkey in the Middle](https://adventofcode.com/2022/day/11)    | [day11.rs](src/solutions/day11.rs) |
 | 12  | [Hill Climbing Algorithm](https://adventofcode.com/2022/day/12) | [day12.rs](src/solutions/day12.rs) |
 | 13  | [Distress Signal](https://adventofcode.com/2022/day/13)         | [day13.rs](src/solutions/day13.rs) |
+| 14  | [Regolith Reservoir](https://adventofcode.com/2022/day/14)      | [day14.rs](src/solutions/day14.rs) |
