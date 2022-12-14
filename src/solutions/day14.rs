@@ -55,15 +55,11 @@ impl Cave {
         }
     }
 
-    pub fn get(&mut self, x: isize, y: usize) -> bool {
-        while x - self.offset < 0 {
-            self.map.push_front(Vec::new());
-            self.offset -= 1;
+    pub fn get(&self, x: isize, y: usize) -> bool {
+        if x - self.offset < 0 || x - self.offset >= self.map.len() as isize {
+            return false;
         }
-        while x - self.offset >= self.map.len() as isize {
-            self.map.push_back(Vec::new());
-        }
-        let col = &mut self.map[(x - self.offset) as usize];
+        let col = &self.map[(x - self.offset) as usize];
         if y >= col.len() {
             return false;
         }
