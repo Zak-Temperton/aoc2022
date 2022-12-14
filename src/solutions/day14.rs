@@ -45,8 +45,8 @@ impl Cave {
     }
 
     pub fn add_sand(&mut self, sand: (isize, isize), count: &mut usize) {
-        for c in [(0, 1), (-1, 1), (1, 1)] {
-            let (x, y) = (sand.0 + c.0, sand.1 + c.1);
+        for dx in [0, -1, 1] {
+            let (x, y) = (sand.0 + dx, sand.1 + 1);
             if !self.get(x, y as usize) && y != self.depth {
                 self.insert(x, y as usize);
                 *count += 1;
@@ -93,8 +93,8 @@ pub(crate) fn part1(text: &str) -> usize {
     'abyss: loop {
         let mut sand = (500, 0);
         'settle: loop {
-            for c in [(0, 1), (-1, 1), (1, 1)] {
-                let (x, y) = (sand.0 + c.0, sand.1 + c.1);
+            for dx in [0, -1, 1] {
+                let (x, y) = (sand.0 + dx, sand.1 + 1);
                 if !cave.get(x, y as usize) {
                     sand = (x, y);
                     if sand.1 > cave.depth {
