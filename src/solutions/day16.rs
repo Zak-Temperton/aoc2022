@@ -60,20 +60,26 @@ pub(crate) fn part1(text: &str) -> usize {
         }
         new_valves.insert(from, new_valve);
     }
-    test(name_to_id("AA"), &mut new_valves, 31)
+    test(name_to_id("AA"), &mut new_valves, 30)
 }
 
 fn test(cur: usize, valves: &mut HashMap<usize, Valve>, time: usize) -> usize {
-    valves.get_mut(&cur).unwrap().open = true;
-    let pressure = valves.get(&cur).unwrap().flow_rate * (time - 1);
-    let mut highest = 0;
+    if time == 0 {
+        return 0;
+    }
+    let pressure = valves.get(&cur).unwrap().flow_rate * (time);
+    let mut best = pressure;
     for (tunnel, len) in valves.get(&cur).unwrap().tunnels.clone() {
         if !valves.get(&tunnel).unwrap().open && time > len + 1 {
-            highest = highest.max(test(tunnel, valves, (time - 1) - len));
+            valves.get_mut(&tunnel).unwrap().open = true;
+            let result = test(tunnel, valves, (time - 1) - len) + pressure;
+            if best < result {
+                best = result;
+            }
+            valves.get_mut(&tunnel).unwrap().open = false;
         }
     }
-    valves.get_mut(&cur).unwrap().open = false;
-    pressure + highest
+    best
 }
 
 fn bfs(cur: usize, target: usize, valves: &mut HashMap<usize, Valve>, len: usize) -> usize {
@@ -92,7 +98,55 @@ fn bfs(cur: usize, target: usize, valves: &mut HashMap<usize, Valve>, len: usize
 }
 
 pub(crate) fn part2(text: &str) -> usize {
-    todo!()
+    let mut valves = HashMap::new();
+    let mut working_valves = HashSet::new();
+    for line in text.lines() {
+        let valve = Valve::from(line);
+        if valve.flow_rate > 0 {
+            working_valves.insert(valve.id);
+        }
+        valves.insert(valve.id, valve);
+    }
+
+    let mut new_valves = HashMap::new();
+    for &from in working_valves.iter().chain([name_to_id("AA")].iter()) {
+        let valve = valves.get(&from).unwrap().clone();
+        let mut new_valve = Valve {
+            flow_rate: valve.flow_rate,
+            id: from,
+            open: false,
+            tunnels: Vec::new(),
+        };
+        for &to in working_valves.iter() {
+            if from != to {
+                let len = bfs(from, to, &mut valves, 0);
+                new_valve.tunnels.push((to, len))
+            }
+        }
+        new_valves.insert(from, new_valve);
+    }
+
+    test2(name_to_id("AA"), &mut new_valves, 26)
+}
+
+fn test2(me: usize, valves: &mut HashMap<usize, Valve>, time1: usize) -> usize {
+    let mut best = 0;
+    if time1 > 0 {
+        let pressure = valves.get(&me).unwrap().flow_rate * (time1);
+        best = pressure + test(0, valves, 26);
+        for (tunnel, len) in valves.get(&me).unwrap().tunnels.clone() {
+            if !valves.get(&tunnel).unwrap().open && time1 > len + 1 {
+                valves.get_mut(&tunnel).unwrap().open = true;
+                let result = test2(tunnel, valves, (time1 - 1) - len) + pressure;
+                if best < result {
+                    best = result;
+                }
+                valves.get_mut(&tunnel).unwrap().open = false;
+            }
+        }
+    }
+
+    best
 }
 
 #[allow(soft_unstable, unused_imports, dead_code)]
@@ -107,6 +161,7 @@ mod bench {
         b.iter(|| part1(&text));
     }
     #[bench]
+    #[ignore = "too slow"]
     fn part2_bench(b: &mut Bencher) {
         let text = read_to_string(PATH).unwrap();
         b.iter(|| part2(&text));
