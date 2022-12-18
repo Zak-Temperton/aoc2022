@@ -1,29 +1,32 @@
-use std::collections::HashSet;
-
 pub(crate) fn part1(text: &str) -> usize {
-    let mut lava = HashSet::new();
+    let mut cube = vec![vec![vec![false; 21]; 21]; 21];
+    let mut lava = Vec::new();
     for line in text.lines() {
         let mut split = line.split(',');
         let (x, y, z) = (
-            split.next().unwrap().parse::<isize>().unwrap(),
-            split.next().unwrap().parse::<isize>().unwrap(),
-            split.next().unwrap().parse::<isize>().unwrap(),
+            split.next().unwrap().parse::<usize>().unwrap(),
+            split.next().unwrap().parse::<usize>().unwrap(),
+            split.next().unwrap().parse::<usize>().unwrap(),
         );
-        lava.insert((x, y, z));
+        lava.push((x, y, z));
+        cube[x][y][z] = true;
     }
 
     let mut surface = 0;
     for &(x, y, z) in lava.iter() {
         for (i, j, k) in [(1, 0, 0), (0, 1, 0), (0, 0, 1)] {
-            if !lava.contains(&(x + i, y + j, z + k)) {
+            if (x == 21 && i == 1 || y == 21 && j == 1 || z == 21 && k == 1)
+                || !cube[x + i][y + j][z + k]
+            {
                 surface += 1;
             }
-            if !lava.contains(&(x - i, y - j, z - k)) {
+            if (x == 0 && i == 1 || y == 0 && j == 1 || z == 0 && k == 1)
+                || !cube[x - i][y - j][z - k]
+            {
                 surface += 1;
             }
         }
     }
-
     surface
 }
 
