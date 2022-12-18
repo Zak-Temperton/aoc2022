@@ -21,3 +21,4 @@ My solutions to Advent of Code 2022 in Rust
 | 15  | [Beacon Exclusion Zone](https://adventofcode.com/2022/day/15)   | [day15.rs](src/solutions/day15.rs) |
 | 16  | [Proboscidea Volcanium](https://adventofcode.com/2022/day/16)   | [day16.rs](src/solutions/day16.rs) |
 | 17  | [Pyroclastic Flow](https://adventofcode.com/2022/day/17)        | [day17.rs](src/solutions/day17.rs) |
+| 18  | [Boiling Boulders](https://adventofcode.com/2022/day/18)        | [day18.rs](src/solutions/day18.rs) |
