@@ -20,3 +20,4 @@ My solutions to Advent of Code 2022 in Rust
 | 14  | [Regolith Reservoir](https://adventofcode.com/2022/day/14)      | [day14.rs](src/solutions/day14.rs) |
 | 15  | [Beacon Exclusion Zone](https://adventofcode.com/2022/day/15)   | [day15.rs](src/solutions/day15.rs) |
 | 16  | [Proboscidea Volcanium](https://adventofcode.com/2022/day/16)   | [day16.rs](src/solutions/day16.rs) |
+| 17  | [Pyroclastic Flow](https://adventofcode.com/2022/day/17)        | [day17.rs](src/solutions/day17.rs) |

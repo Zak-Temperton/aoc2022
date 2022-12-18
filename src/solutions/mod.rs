@@ -115,13 +115,13 @@ pub(crate) fn day16() {
     println!("{}", day16::part1(&text));
     println!("{}", day16::part2(&text));
 }
-// mod day17;
-// pub(crate) fn day17() {
-//     println!("day17:");
-//     let text = read_to_string("res/day17.txt").unwrap();
-//     println!("{}", day17::part1(&text));
-//     println!("{}", day17::part2(&text));
-// }
+mod day17;
+pub(crate) fn day17() {
+    println!("day17:");
+    let text = read_to_string("res/day17.txt").unwrap();
+    println!("{}", day17::part1(&text));
+    println!("{}", day17::part2(&text));
+}
 // mod day18;
 // pub(crate) fn day18() {
 //     println!("day18:");
