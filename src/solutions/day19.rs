@@ -1,24 +1,5 @@
 use std::collections::{HashSet, VecDeque};
 
-pub(crate) fn part1(text: &str) -> u32 {
-    let mut sum = 0;
-    for line in text.lines() {
-        let mut split = line
-            .split(|c| !"-0123456789".contains(c))
-            .filter(|num| !num.is_empty())
-            .flat_map(|num| num.parse::<u32>());
-        let blueprint = split.next().unwrap();
-        let ore_cost = split.next().unwrap();
-        let clay_cost = split.next().unwrap();
-        let obsidian_cost = (split.next().unwrap(), split.next().unwrap());
-        let geode_cost = (split.next().unwrap(), split.next().unwrap());
-
-        let quality = max_geodes_processed(ore_cost, clay_cost, obsidian_cost, geode_cost, 24);
-        sum += quality * blueprint;
-    }
-    sum
-}
-
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 struct State {
     resources: [u32; 4],
@@ -116,6 +97,25 @@ fn max_geodes_processed(
         }
     }
     res
+}
+
+pub(crate) fn part1(text: &str) -> u32 {
+    let mut sum = 0;
+    for line in text.lines() {
+        let mut split = line
+            .split(|c: char| !c.is_ascii_digit())
+            .filter(|num| !num.is_empty())
+            .flat_map(|num| num.parse::<u32>());
+        let blueprint = split.next().unwrap();
+        let ore_cost = split.next().unwrap();
+        let clay_cost = split.next().unwrap();
+        let obsidian_cost = (split.next().unwrap(), split.next().unwrap());
+        let geode_cost = (split.next().unwrap(), split.next().unwrap());
+
+        let quality = max_geodes_processed(ore_cost, clay_cost, obsidian_cost, geode_cost, 24);
+        sum += quality * blueprint;
+    }
+    sum
 }
 
 pub(crate) fn part2(text: &str) -> u32 {
