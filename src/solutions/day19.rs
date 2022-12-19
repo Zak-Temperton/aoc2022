@@ -56,12 +56,12 @@ fn max_geodes_processed(
         if seen.contains(&state.hash()) {
             continue;
         }
-        //clear room in RAM
         //with a queue all states are given in chronological order
         if state.time < next_time {
             next_time = state.time;
             seen.clear();
         }
+        //Store unique Hash and not entire state
         seen.insert(state.hash());
         state.time -= 1;
 
@@ -75,7 +75,7 @@ fn max_geodes_processed(
             states.push_back(new_state);
             continue;
         }
-        //if you can afford a new geode robot each turn always make a geode robot
+        //Always buy obsidian robot as it helps you buy geode robots ASAP
         if state.robots[2] < geode_cost.1
             && state.resources[0] >= obsidian_cost.0
             && state.resources[1] >= obsidian_cost.1
