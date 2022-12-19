@@ -1,5 +1,5 @@
 pub(crate) fn part1(text: &str) -> usize {
-    let mut cube = vec![vec![vec![false; 21]; 21]; 21];
+    let mut cube = [[[false; 21]; 21]; 21];
     let mut lava = Vec::new();
     for line in text.lines() {
         let mut split = line.split(',');
@@ -38,7 +38,7 @@ enum State {
 }
 
 pub(crate) fn part2(text: &str) -> usize {
-    let mut cube = vec![vec![vec![State::Air; 22]; 22]; 22];
+    let mut cube = [[[State::Air; 22]; 22]; 22];
     for line in text.lines() {
         let mut split = line.split(',');
         let (x, y, z) = (
