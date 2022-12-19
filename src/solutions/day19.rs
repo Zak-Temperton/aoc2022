@@ -33,10 +33,6 @@ fn max_geodes_processed(
     let mut states = VecDeque::new();
     states.push_back(State::new(time));
     let mut seen = HashSet::new();
-    let max_ore_cost = *[ore_cost, clay_cost, obsidian_cost.0, geode_cost.0]
-        .iter()
-        .max()
-        .unwrap();
     let mut res = 0;
     let mut next_time = time;
     while let Some(mut state) = states.pop_front() {
@@ -58,14 +54,21 @@ fn max_geodes_processed(
 
         //if you can afford a new geode robot each turn always make a geode robot
         if state.robots[0] < geode_cost.0 || state.robots[2] < geode_cost.1 {
-            if state.robots[0] < max_ore_cost && state.resources[0] >= ore_cost {
+            if (state.robots[2] < geode_cost.1 && state.robots[0] < obsidian_cost.0
+                || state.robots[1] < obsidian_cost.1 && state.robots[0] < clay_cost
+                || state.robots[0] < geode_cost.0)
+                && state.resources[0] >= ore_cost
+            {
                 let mut new_state = state.clone();
                 new_state.earn();
                 new_state.robots[0] += 1;
                 new_state.resources[0] -= ore_cost;
                 states.push_back(new_state);
             }
-            if state.robots[1] < obsidian_cost.1 && state.resources[0] >= clay_cost {
+            if state.robots[2] < geode_cost.1
+                && state.robots[1] < obsidian_cost.1
+                && state.resources[0] >= clay_cost
+            {
                 let mut new_state = state.clone();
                 new_state.earn();
                 new_state.robots[1] += 1;
