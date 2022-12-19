@@ -21,6 +21,19 @@ impl State {
             self.resources[i] += self.robots[i];
         }
     }
+
+    pub fn hash(&mut self) -> u64 {
+        let mut hash = 0;
+        for i in 0..4 {
+            hash *= 120;
+            hash += self.resources[i] as u64;
+            hash *= 20;
+            hash += self.robots[i] as u64;
+        }
+        hash *= 32;
+        hash += self.time as u64;
+        hash
+    }
 }
 
 fn max_geodes_processed(
@@ -40,7 +53,7 @@ fn max_geodes_processed(
             res = res.max(state.resources[3]);
             continue;
         }
-        if seen.contains(&state) {
+        if seen.contains(&state.hash()) {
             continue;
         }
         //clear room in RAM
@@ -49,44 +62,10 @@ fn max_geodes_processed(
             next_time = state.time;
             seen.clear();
         }
-        seen.insert(state);
+        seen.insert(state.hash());
         state.time -= 1;
 
-        //if you can afford a new geode robot each turn always make a geode robot
-        if state.robots[0] < geode_cost.0 || state.robots[2] < geode_cost.1 {
-            if (state.robots[2] < geode_cost.1 && state.robots[0] < obsidian_cost.0
-                || state.robots[1] < obsidian_cost.1 && state.robots[0] < clay_cost
-                || state.robots[0] < geode_cost.0)
-                && state.resources[0] >= ore_cost
-            {
-                let mut new_state = state.clone();
-                new_state.earn();
-                new_state.robots[0] += 1;
-                new_state.resources[0] -= ore_cost;
-                states.push_back(new_state);
-            }
-            if state.robots[2] < geode_cost.1
-                && state.robots[1] < obsidian_cost.1
-                && state.resources[0] >= clay_cost
-            {
-                let mut new_state = state.clone();
-                new_state.earn();
-                new_state.robots[1] += 1;
-                new_state.resources[0] -= clay_cost;
-                states.push_back(new_state);
-            }
-            if state.robots[2] < geode_cost.1
-                && state.resources[0] >= obsidian_cost.0
-                && state.resources[1] >= obsidian_cost.1
-            {
-                let mut new_state = state.clone();
-                new_state.earn();
-                new_state.robots[2] += 1;
-                new_state.resources[0] -= obsidian_cost.0;
-                new_state.resources[1] -= obsidian_cost.1;
-                states.push_back(new_state);
-            }
-        }
+        //Always buy geode robot as soon as possible
         if state.resources[0] >= geode_cost.0 && state.resources[2] >= geode_cost.1 {
             let mut new_state = state.clone();
             new_state.earn();
@@ -94,10 +73,47 @@ fn max_geodes_processed(
             new_state.resources[0] -= geode_cost.0;
             new_state.resources[2] -= geode_cost.1;
             states.push_back(new_state);
-        } else {
-            state.earn();
-            states.push_back(state);
+            continue;
         }
+        //if you can afford a new geode robot each turn always make a geode robot
+        if state.robots[2] < geode_cost.1
+            && state.resources[0] >= obsidian_cost.0
+            && state.resources[1] >= obsidian_cost.1
+        {
+            let mut new_state = state.clone();
+            new_state.earn();
+            new_state.robots[2] += 1;
+            new_state.resources[0] -= obsidian_cost.0;
+            new_state.resources[1] -= obsidian_cost.1;
+            states.push_back(new_state);
+            continue;
+        }
+
+        if (state.robots[2] < geode_cost.1 && state.robots[0] < obsidian_cost.0
+            || state.robots[1] < obsidian_cost.1 && state.robots[0] < clay_cost
+            || state.robots[0] < geode_cost.0)
+            && state.resources[0] >= ore_cost
+        {
+            let mut new_state = state.clone();
+            new_state.earn();
+            new_state.robots[0] += 1;
+            new_state.resources[0] -= ore_cost;
+            states.push_back(new_state);
+        }
+
+        if state.robots[2] < geode_cost.1
+            && state.robots[1] < obsidian_cost.1
+            && state.resources[0] >= clay_cost
+        {
+            let mut new_state = state.clone();
+            new_state.earn();
+            new_state.robots[1] += 1;
+            new_state.resources[0] -= clay_cost;
+            states.push_back(new_state);
+        }
+
+        state.earn();
+        states.push_back(state);
     }
     res
 }
@@ -147,14 +163,12 @@ mod bench {
     use test::Bencher;
     const PATH: &str = "res/day19.txt";
     #[bench]
-    #[ignore = "too slow"]
-
     fn part1_bench(b: &mut Bencher) {
         let text = read_to_string(PATH).unwrap();
         b.iter(|| part1(&text));
     }
     #[bench]
-    #[ignore = "WAY too slow"]
+    #[ignore = "too slow"]
     fn part2_bench(b: &mut Bencher) {
         let text = read_to_string(PATH).unwrap();
         b.iter(|| part2(&text));
