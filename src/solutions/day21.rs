@@ -21,6 +21,16 @@ fn name_to_u32(name: &str) -> u32 {
     res
 }
 
+fn run_job(key: u32, monkeys: &HashMap<u32, Job>) -> i64 {
+    match *monkeys.get(&key).unwrap() {
+        Job::Add(l, r) => run_job(l, monkeys) + run_job(r, monkeys),
+        Job::Sub(l, r) => run_job(l, monkeys) - run_job(r, monkeys),
+        Job::Mul(l, r) => run_job(l, monkeys) * run_job(r, monkeys),
+        Job::Div(l, r) => run_job(l, monkeys) / run_job(r, monkeys),
+        Job::Num(n) => n,
+    }
+}
+
 pub(crate) fn part1(text: &str) -> i64 {
     let mut monkeys = HashMap::new();
     for line in text.lines() {
@@ -53,16 +63,6 @@ pub(crate) fn part1(text: &str) -> i64 {
         }
     }
     run_job(name_to_u32("root"), &monkeys)
-}
-
-fn run_job(key: u32, monkeys: &HashMap<u32, Job>) -> i64 {
-    match *monkeys.get(&key).unwrap() {
-        Job::Add(l, r) => run_job(l, monkeys) + run_job(r, monkeys),
-        Job::Sub(l, r) => run_job(l, monkeys) - run_job(r, monkeys),
-        Job::Mul(l, r) => run_job(l, monkeys) * run_job(r, monkeys),
-        Job::Div(l, r) => run_job(l, monkeys) / run_job(r, monkeys),
-        Job::Num(n) => n,
-    }
 }
 
 #[derive(Debug, Clone, Copy)]
@@ -125,6 +125,13 @@ fn get_match(key: u32, monkeys: &HashMap<u32, Input>, to_match: i64) -> i64 {
     }
 }
 
+fn convert(key: u32, monkeys: &mut HashMap<u32, Input>) {
+    match *monkeys.get(&key).unwrap() {
+        Input::Human(_) => unreachable!(),
+        Input::Const(j) => *monkeys.get_mut(&key).unwrap() = Input::Human(j),
+    }
+}
+
 fn prepare(key: u32, monkeys: &mut HashMap<u32, Input>) -> bool {
     if key == name_to_u32("humn") {
         convert(key, monkeys);
@@ -146,13 +153,6 @@ fn prepare(key: u32, monkeys: &mut HashMap<u32, Input>) -> bool {
             }
         }
         _ => false,
-    }
-}
-
-fn convert(key: u32, monkeys: &mut HashMap<u32, Input>) {
-    match *monkeys.get(&key).unwrap() {
-        Input::Human(_) => unreachable!(),
-        Input::Const(j) => *monkeys.get_mut(&key).unwrap() = Input::Human(j),
     }
 }
 
@@ -201,11 +201,10 @@ pub(crate) fn part2(text: &str) -> i64 {
     }
     prepare(name_to_u32("root"), &mut monkeys);
     let (left, right) = match *monkeys.get(&name_to_u32("root")).unwrap() {
-        Input::Human(Job::Add(l, r)) => (l, r),
-        Input::Human(Job::Sub(l, r)) => (l, r),
-        Input::Human(Job::Mul(l, r)) => (l, r),
-        Input::Human(Job::Div(l, r)) => (l, r),
-
+        Input::Human(Job::Add(l, r))
+        | Input::Human(Job::Sub(l, r))
+        | Input::Human(Job::Mul(l, r))
+        | Input::Human(Job::Div(l, r)) => (l, r),
         _ => unreachable!(),
     };
     if let Input::Const(_) = monkeys.get(&left).unwrap() {
