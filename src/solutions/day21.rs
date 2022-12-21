@@ -15,7 +15,7 @@ fn name_to_u32(name: &str) -> u32 {
     let mut i = 0;
     while i < bytes.len() {
         res <<= 8;
-        res += bytes[i] as u32;
+        res |= bytes[i] as u32;
         i += 1;
     }
     res
