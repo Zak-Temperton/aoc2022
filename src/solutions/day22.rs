@@ -146,5 +146,14 @@ fn take_steps(
 }
 
 pub(crate) fn part2(text: &str) -> i64 {
+    let mut lines = text.lines();
+    let mut map = Vec::new();
+    while let Some(line) = lines.next() {
+        if line.is_empty() {
+            break;
+        }
+        map.push(line.as_bytes());
+    }
+    let instructions = lines.next().unwrap().as_bytes();
     todo!("Need complete Rework of thinking")
 }
