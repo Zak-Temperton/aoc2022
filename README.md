@@ -28,3 +28,4 @@ My solutions to Advent of Code 2022 in Rust
 | 22  | [Monkey Map](https://adventofcode.com/2022/day/22)               | [day22.rs (part1)](src/solutions/day22.rs) |
 | 23  | [Unstable Diffusion](https://adventofcode.com/2022/day/23)       | [day23.rs](src/solutions/day23.rs)         |
 | 24  | [Blizzard Basin](https://adventofcode.com/2022/day/24)           | [day24.rs](src/solutions/day24.rs)         |
+| 25  | [Full of Hot Air](https://adventofcode.com/2022/day/25)          | [day25.rs (part1)](src/solutions/day25.rs) |
