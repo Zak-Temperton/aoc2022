@@ -180,3 +180,21 @@ pub(crate) fn part2(text: &str) -> usize {
         width,
     )
 }
+
+#[allow(soft_unstable, unused_imports, dead_code)]
+mod bench {
+    use super::*;
+    use std::fs::read_to_string;
+    use test::Bencher;
+    const PATH: &str = "res/day24.txt";
+    #[bench]
+    fn part1_bench(b: &mut Bencher) {
+        let text = read_to_string(PATH).unwrap();
+        b.iter(|| part1(&text));
+    }
+    #[bench]
+    fn part2_bench(b: &mut Bencher) {
+        let text = read_to_string(PATH).unwrap();
+        b.iter(|| part2(&text));
+    }
+}

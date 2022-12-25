@@ -232,3 +232,21 @@ fn create_planb(x: usize, y: usize, map: &[Vec<bool>], i: usize) -> ((usize, usi
     }
     return ((x + 1, y + 1), false);
 }
+
+#[allow(soft_unstable, unused_imports, dead_code)]
+mod bench {
+    use super::*;
+    use std::fs::read_to_string;
+    use test::Bencher;
+    const PATH: &str = "res/day23.txt";
+    #[bench]
+    fn part1_bench(b: &mut Bencher) {
+        let text = read_to_string(PATH).unwrap();
+        b.iter(|| part1(&text));
+    }
+    #[bench]
+    fn part2_bench(b: &mut Bencher) {
+        let text = read_to_string(PATH).unwrap();
+        b.iter(|| part2(&text));
+    }
+}
