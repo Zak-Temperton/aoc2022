@@ -176,5 +176,4 @@ pub(crate) fn day25() {
     println!("day25:");
     let text = read_to_string("res/day25.txt").unwrap();
     println!("{}", day25::part1(&text));
-    println!("{}", day25::part2(&text));
 }
