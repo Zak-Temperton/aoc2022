@@ -86,36 +86,36 @@ fn get_match(key: u32, monkeys: &HashMap<u32, Input>, to_match: i64) -> i64 {
     match *monkeys.get(&key).unwrap() {
         Input::Human(Job::Add(l, r)) => {
             if let Input::Const(_) = monkeys.get(&l).unwrap() {
-                get_match(r, &monkeys, to_match - run_job2(l, monkeys))
+                get_match(r, monkeys, to_match - run_job2(l, monkeys))
             } else if let Input::Const(_) = monkeys.get(&r).unwrap() {
-                get_match(l, &monkeys, to_match - run_job2(r, monkeys))
+                get_match(l, monkeys, to_match - run_job2(r, monkeys))
             } else {
                 unreachable!()
             }
         }
         Input::Human(Job::Sub(l, r)) => {
             if let Input::Const(_) = *monkeys.get(&l).unwrap() {
-                get_match(r, &monkeys, run_job2(l, monkeys) - to_match)
+                get_match(r, monkeys, run_job2(l, monkeys) - to_match)
             } else if let Input::Const(_) = *monkeys.get(&r).unwrap() {
-                get_match(l, &monkeys, to_match + run_job2(r, monkeys))
+                get_match(l, monkeys, to_match + run_job2(r, monkeys))
             } else {
                 unreachable!()
             }
         }
         Input::Human(Job::Mul(l, r)) => {
             if let Input::Const(_) = monkeys.get(&l).unwrap() {
-                get_match(r, &monkeys, to_match / run_job2(l, monkeys))
+                get_match(r, monkeys, to_match / run_job2(l, monkeys))
             } else if let Input::Const(_) = monkeys.get(&r).unwrap() {
-                get_match(l, &monkeys, to_match / run_job2(r, monkeys))
+                get_match(l, monkeys, to_match / run_job2(r, monkeys))
             } else {
                 unreachable!()
             }
         }
         Input::Human(Job::Div(l, r)) => {
             if let Input::Const(_) = monkeys.get(&l).unwrap() {
-                get_match(r, &monkeys, run_job2(l, monkeys) * to_match)
+                get_match(r, monkeys, run_job2(l, monkeys) * to_match)
             } else if let Input::Const(_) = monkeys.get(&r).unwrap() {
-                get_match(l, &monkeys, run_job2(r, monkeys) * to_match)
+                get_match(l, monkeys, run_job2(r, monkeys) * to_match)
             } else {
                 unreachable!()
             }
@@ -142,10 +142,7 @@ fn prepare(key: u32, monkeys: &mut HashMap<u32, Input>) -> bool {
         | Input::Const(Job::Sub(l, r))
         | Input::Const(Job::Mul(l, r))
         | Input::Const(Job::Div(l, r)) => {
-            if prepare(l, monkeys) {
-                convert(key, monkeys);
-                true
-            } else if prepare(r, monkeys) {
+            if prepare(l, monkeys) | prepare(r, monkeys) {
                 convert(key, monkeys);
                 true
             } else {
@@ -208,10 +205,10 @@ pub(crate) fn part2(text: &str) -> i64 {
         _ => unreachable!(),
     };
     if let Input::Const(_) = monkeys.get(&left).unwrap() {
-        let to_match = run_job2(left, &mut monkeys);
+        let to_match = run_job2(left, &monkeys);
         get_match(right, &monkeys, to_match)
     } else {
-        let to_match = run_job2(right, &mut monkeys);
+        let to_match = run_job2(right, &monkeys);
         get_match(left, &monkeys, to_match)
     }
 }

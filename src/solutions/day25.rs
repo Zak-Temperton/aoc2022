@@ -33,7 +33,7 @@ fn snafu_to_decimal(snafu: &str) -> i64 {
 }
 
 pub(crate) fn part1(text: &str) -> String {
-    decimal_to_snafu(text.lines().map(|line| snafu_to_decimal(line)).sum())
+    decimal_to_snafu(text.lines().map(snafu_to_decimal).sum())
 }
 
 #[allow(soft_unstable, unused_imports, dead_code)]

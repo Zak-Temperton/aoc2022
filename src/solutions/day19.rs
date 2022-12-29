@@ -67,7 +67,7 @@ fn max_geodes_processed(
 
         //Always buy geode robot as soon as possible
         if state.resources[0] >= geode_cost.0 && state.resources[2] >= geode_cost.1 {
-            let mut new_state = state.clone();
+            let mut new_state = state;
             new_state.earn();
             new_state.robots[3] += 1;
             new_state.resources[0] -= geode_cost.0;
@@ -80,7 +80,7 @@ fn max_geodes_processed(
             && state.resources[0] >= obsidian_cost.0
             && state.resources[1] >= obsidian_cost.1
         {
-            let mut new_state = state.clone();
+            let mut new_state = state;
             new_state.earn();
             new_state.robots[2] += 1;
             new_state.resources[0] -= obsidian_cost.0;
@@ -94,7 +94,7 @@ fn max_geodes_processed(
             || state.robots[0] < geode_cost.0)
             && state.resources[0] >= ore_cost
         {
-            let mut new_state = state.clone();
+            let mut new_state = state;
             new_state.earn();
             new_state.robots[0] += 1;
             new_state.resources[0] -= ore_cost;
@@ -105,7 +105,7 @@ fn max_geodes_processed(
             && state.robots[1] < obsidian_cost.1
             && state.resources[0] >= clay_cost
         {
-            let mut new_state = state.clone();
+            let mut new_state = state;
             new_state.earn();
             new_state.robots[1] += 1;
             new_state.resources[0] -= clay_cost;

@@ -1,4 +1,4 @@
-fn loops(dir: usize, posx: usize, posy: usize) -> (usize, usize) {
+fn loops(posx: usize, posy: usize, dir: usize) -> (usize, usize) {
     match (posx / 50, posy / 50, dir) {
         (1, 0, 2) => (149, posy),
         (1, 0, 3) => (posx, 149),
@@ -31,12 +31,11 @@ fn take_steps(map: &[&[u8]], steps: &mut usize, dir: usize, posx: &mut usize, po
             b'.' => (*posx, *posy) = (nx, ny),
             b'#' => break,
             b' ' => {
-                let (nr, nc) = loops(dir, *posx, *posy);
-
-                if map[nc][nr] == b'#' {
+                let (newx, newy) = loops(*posx, *posy, dir);
+                if map[newy][newx] == b'#' {
                     break;
                 }
-                (*posx, *posy) = (nr, nc);
+                (*posx, *posy) = (newx, newy);
             }
             _ => unreachable!(),
         }
@@ -47,7 +46,7 @@ fn take_steps(map: &[&[u8]], steps: &mut usize, dir: usize, posx: &mut usize, po
 pub(crate) fn part1(text: &str) -> usize {
     let mut lines = text.lines();
     let mut map = Vec::new();
-    while let Some(line) = lines.next() {
+    for line in lines.by_ref() {
         if line.is_empty() {
             break;
         }
@@ -78,7 +77,7 @@ pub(crate) fn part1(text: &str) -> usize {
     1000 * (posy + 1) + 4 * (posx + 1) + facing
 }
 
-fn connections(dir: usize, posx: usize, posy: usize) -> (usize, usize, usize) {
+fn connections(posx: usize, posy: usize, dir: usize) -> (usize, usize, usize) {
     let (nx, ny, ndir) = match (posx / 50, posy / 50, dir) {
         (1, 0, 2) => (0, 2, 0),
         (1, 0, 3) => (0, 3, 0),
@@ -121,12 +120,11 @@ fn take_steps_on_cube(
             b'.' => (*posx, *posy) = (nx, ny),
             b'#' => break,
             b' ' => {
-                let (nr, nc, d) = connections(*dir, *posx, *posy);
-
-                if map[nc][nr] == b'#' {
+                let (newx, newy, new_dir) = connections(*posx, *posy, *dir);
+                if map[newy][newx] == b'#' {
                     break;
                 }
-                (*posx, *posy, *dir) = (nr, nc, d);
+                (*posx, *posy, *dir) = (newx, newy, new_dir);
             }
             _ => unreachable!(),
         }
@@ -137,7 +135,7 @@ fn take_steps_on_cube(
 pub(crate) fn part2(text: &str) -> usize {
     let mut lines = text.lines();
     let mut map = Vec::new();
-    while let Some(line) = lines.next() {
+    for line in lines.by_ref() {
         if line.is_empty() {
             break;
         }

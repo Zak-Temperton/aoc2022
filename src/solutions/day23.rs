@@ -110,7 +110,7 @@ fn create_plan(x: usize, y: usize, map: &[Vec<bool>], i: usize) -> (usize, usize
             _ => {}
         }
     }
-    return (x + 1, y + 1);
+    (x + 1, y + 1)
 }
 
 fn is_elf(map: &[Vec<bool>], x: usize, y: usize) -> bool {
@@ -230,7 +230,7 @@ fn create_planb(x: usize, y: usize, map: &[Vec<bool>], i: usize) -> ((usize, usi
             _ => {}
         }
     }
-    return ((x + 1, y + 1), false);
+    ((x + 1, y + 1), false)
 }
 
 #[allow(soft_unstable, unused_imports, dead_code)]

@@ -139,8 +139,8 @@ pub(crate) fn part1(text: &str) -> usize {
 
 fn column_heights(map: &[[bool; 7]], highest: usize) -> [usize; 7] {
     let mut heights = [0; 7];
-    for i in 0..7 {
-        heights[i] = (0..highest)
+    for (i, height) in heights.iter_mut().enumerate() {
+        *height = (0..highest)
             .find(|&x| map[highest - x][i])
             .unwrap_or(usize::MAX);
     }

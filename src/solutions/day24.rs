@@ -64,16 +64,16 @@ fn init(text: &str, period: usize, height: usize, width: usize) -> Vec<Vec<Vec<V
                     new_pos.push(match c {
                         '<' => (
                             ((x as isize - 2).rem_euclid(width as isize - 2) + 1) as usize,
-                            y as usize,
+                            y,
                             c,
                         ),
-                        '>' => ((x % (width - 2)) + 1, y as usize, c),
+                        '>' => ((x % (width - 2)) + 1, y, c),
                         '^' => (
                             x,
                             ((y as isize - 2).rem_euclid(height as isize - 2) + 1) as usize,
                             c,
                         ),
-                        'v' => (x as usize, (y % (height - 2)) + 1, c),
+                        'v' => (x, (y % (height - 2)) + 1, c),
                         _ => panic!(),
                     });
                 }

@@ -10,8 +10,8 @@ pub(crate) fn part1(text: &str) -> u64 {
         let reach = (sensor.0.abs_diff(beakon.0) + sensor.1.abs_diff(beakon.1)) as i64
             - sensor.1.abs_diff(2_000_000) as i64;
         if reach > 0 {
-            let left = sensor.0 - reach as i64;
-            let right = sensor.0 + reach as i64;
+            let left = sensor.0 - reach;
+            let right = sensor.0 + reach;
             ranges.push((left, right));
         }
     }
