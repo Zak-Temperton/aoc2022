@@ -1,4 +1,4 @@
-pub(crate) fn part1(text: &str) -> u32 {
+pub fn part1(text: &str) -> u32 {
     let mut max = 0;
     let mut cur = 0;
     for line in text.lines() {
@@ -14,7 +14,7 @@ pub(crate) fn part1(text: &str) -> u32 {
     max
 }
 
-pub(crate) fn part2(text: &str) -> u32 {
+pub fn part2(text: &str) -> u32 {
     let mut first = 0;
     let mut second = 0;
     let mut third = 0;

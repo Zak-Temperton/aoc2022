@@ -6,8 +6,8 @@ struct Directory {
 }
 
 impl Directory {
-    pub fn new() -> Directory {
-        Directory {
+    pub fn new() -> Self {
+        Self {
             size: 0,
             children: HashMap::new(),
         }
@@ -30,7 +30,7 @@ fn create_directories(dir: &mut Directory, lines: &mut Lines) -> usize {
                             .entry(n.to_string())
                             .or_insert_with(Directory::new),
                         lines,
-                    )
+                    );
                 }
             },
             ("$", _) => {}
@@ -45,15 +45,15 @@ fn create_directories(dir: &mut Directory, lines: &mut Lines) -> usize {
 }
 
 fn sum_small_dir(dir: &Directory, sum: &mut usize) {
-    for (_, child) in dir.children.iter() {
-        if child.size < 100000 {
+    for child in dir.children.values() {
+        if child.size < 100_000 {
             *sum += child.size;
         }
         sum_small_dir(child, sum);
     }
 }
 
-pub(crate) fn part1(text: &str) -> usize {
+pub fn part1(text: &str) -> usize {
     let mut lines = text.lines();
     let mut dummy = Directory::new();
     create_directories(&mut dummy, &mut lines);
@@ -62,8 +62,8 @@ pub(crate) fn part1(text: &str) -> usize {
     size
 }
 
-fn find_min(dir: &Directory, space_needed: &usize, min: &mut usize) {
-    for (_, child) in dir.children.iter().filter(|(_, c)| c.size >= *space_needed) {
+fn find_min(dir: &Directory, space_needed: usize, min: &mut usize) {
+    for (_, child) in dir.children.iter().filter(|(_, c)| c.size >= space_needed) {
         if child.size < *min {
             *min = child.size;
         }
@@ -71,13 +71,13 @@ fn find_min(dir: &Directory, space_needed: &usize, min: &mut usize) {
     }
 }
 
-pub(crate) fn part2(text: &str) -> usize {
+pub fn part2(text: &str) -> usize {
     let mut lines = text.lines();
     let mut dummy = Directory::new();
     create_directories(&mut dummy, &mut lines);
     let space_needed = 30_000_000 - (70_000_000 - dummy.size);
     let mut min = usize::MAX;
-    find_min(&dummy, &space_needed, &mut min);
+    find_min(&dummy, space_needed, &mut min);
     min
 }
 

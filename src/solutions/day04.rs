@@ -6,7 +6,7 @@ where
     let mut a = [0; 4];
     for line in text.lines() {
         let mut split = line.split(',').flat_map(|s| s.split('-'));
-        for a in a.iter_mut() {
+        for a in &mut a {
             *a = split.next().unwrap().parse().unwrap();
         }
         if p(&a) {
@@ -16,12 +16,12 @@ where
     count
 }
 
-pub(crate) fn part1(text: &str) -> u32 {
+pub fn part1(text: &str) -> u32 {
     solution(text, |a| {
         (a[0] <= a[2] && a[1] >= a[3]) || (a[0] >= a[2] && a[1] <= a[3])
     })
 }
-pub(crate) fn part2(text: &str) -> u32 {
+pub fn part2(text: &str) -> u32 {
     solution(text, |a| a[0] <= a[3] && a[1] >= a[2])
 }
 

@@ -17,9 +17,9 @@ enum Operation {
 }
 
 impl Monkey {
-    fn new(lines: [&str; 7]) -> Monkey {
-        Monkey {
-            items: lines[1][18..].split(", ").flat_map(|s| s.parse()).collect(),
+    fn new(lines: [&str; 7]) -> Self {
+        Self {
+            items: lines[1][18..].split(", ").flat_map(str::parse).collect(),
             operation: {
                 let mut split = lines[2][23..].split_whitespace();
                 (
@@ -43,7 +43,7 @@ impl Monkey {
         }
     }
 
-    fn test(&self, item: usize) -> usize {
+    const fn test(&self, item: usize) -> usize {
         if item % self.test == 0 {
             self.if_true
         } else {
@@ -68,7 +68,7 @@ fn calc_monkey_business(monkeys: Vec<Monkey>) -> usize {
     max1 * max2
 }
 
-pub(crate) fn part1(text: &str) -> usize {
+pub fn part1(text: &str) -> usize {
     let mut monkeys = Vec::new();
     for lines in text.lines().array_chunks::<7>() {
         monkeys.push(Monkey::new(lines));
@@ -79,10 +79,7 @@ pub(crate) fn part1(text: &str) -> usize {
             monkeys[m].inspections += monkeys[m].items.len();
             for i in 0..monkeys[m].items.len() {
                 let mut item = monkeys[m].items[i];
-                let val = match operation.1 {
-                    None => item,
-                    Some(n) => n,
-                };
+                let val = operation.1.map_or(item, |n| n);
                 item = match operation.0 {
                     Operation::Mul => item * val,
                     Operation::Div => item / val,
@@ -99,7 +96,7 @@ pub(crate) fn part1(text: &str) -> usize {
     calc_monkey_business(monkeys)
 }
 
-pub(crate) fn part2(text: &str) -> usize {
+pub fn part2(text: &str) -> usize {
     let mut monkeys = Vec::new();
     let mut multiple = 1;
     for lines in text.lines().array_chunks::<7>() {
@@ -112,10 +109,7 @@ pub(crate) fn part2(text: &str) -> usize {
             monkeys[m].inspections += monkeys[m].items.len();
             for i in 0..monkeys[m].items.len() {
                 let mut item = monkeys[m].items[i];
-                let val = match operation.1 {
-                    None => item,
-                    Some(n) => n,
-                };
+                let val = operation.1.map_or(item, |n| n);
                 item = match operation.0 {
                     Operation::Mul => item * val,
                     Operation::Div => item / val,

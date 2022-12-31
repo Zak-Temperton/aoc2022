@@ -1,4 +1,4 @@
-pub(crate) fn part1(text: &str) -> usize {
+pub fn part1(text: &str) -> usize {
     let mut cube = [[[false; 21]; 21]; 21];
     let mut lava = Vec::new();
     for line in text.lines() {
@@ -13,7 +13,7 @@ pub(crate) fn part1(text: &str) -> usize {
     }
 
     let mut surface = 0;
-    for &(x, y, z) in lava.iter() {
+    for &(x, y, z) in &lava {
         for (i, j, k) in [(1, 0, 0), (0, 1, 0), (0, 0, 1)] {
             if (x == 21 && i == 1 || y == 21 && j == 1 || z == 21 && k == 1)
                 || !cube[x + i][y + j][z + k]
@@ -37,7 +37,7 @@ enum State {
     Air,
 }
 
-pub(crate) fn part2(text: &str) -> usize {
+pub fn part2(text: &str) -> usize {
     let mut cube = [[[State::Air; 22]; 22]; 22];
     for line in text.lines() {
         let mut split = line.split(',');

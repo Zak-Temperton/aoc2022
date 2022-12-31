@@ -1,11 +1,11 @@
-pub(crate) fn part1(text: &str) -> u32 {
+pub fn part1(text: &str) -> u32 {
     let mut sum = 0;
     let mut letters: [bool; 53];
 
     for line in text.lines() {
         let half = line.len() / 2;
-        let left = line[0..half].bytes().map(|c| char_to_priority(&c));
-        let right = line[half..].bytes().map(|c| char_to_priority(&c));
+        let left = line[0..half].bytes().map(char_to_priority);
+        let right = line[half..].bytes().map(char_to_priority);
         letters = [false; 53];
 
         left.for_each(|i| letters[i as usize] = true);
@@ -20,18 +20,16 @@ pub(crate) fn part1(text: &str) -> u32 {
     sum
 }
 
-const fn char_to_priority(c: &u8) -> u8 {
-    if *c < b'a' {
-        *c - b'A' + 27
+const fn char_to_priority(c: u8) -> u8 {
+    if c < b'a' {
+        c - b'A' + 27
     } else {
-        *c - b'a' + 1
+        c - b'a' + 1
     }
 }
 
-pub(crate) fn part2(text: &str) -> u32 {
-    let mut lines = text
-        .lines()
-        .map(|i| i.bytes().map(|c| char_to_priority(&c)));
+pub fn part2(text: &str) -> u32 {
+    let mut lines = text.lines().map(|i| i.bytes().map(char_to_priority));
     let mut sum = 0;
     let mut letters: [u8; 53];
     while let (Some(group_a), Some(group_b), Some(group_c)) =

@@ -1,4 +1,4 @@
-pub(crate) fn part1(text: &str) -> usize {
+pub fn part1(text: &str) -> usize {
     let mut head = (300, 300);
     let mut tail = (300, 300);
     let mut visited = [[false; 600]; 600];
@@ -31,7 +31,7 @@ pub(crate) fn part1(text: &str) -> usize {
     count
 }
 
-pub(crate) fn part2(text: &str) -> usize {
+pub fn part2(text: &str) -> usize {
     let mut rope = [(300, 300); 10];
     let mut visited = [[false; 600]; 600];
     visited[rope[9].0 as usize][rope[9].1 as usize] = true;

@@ -1,10 +1,10 @@
-pub(crate) fn part1(text: &str) -> u64 {
+pub fn part1(text: &str) -> u64 {
     let mut ranges = Vec::new();
     for line in text.lines() {
         let mut nums = line
             .split(|c| !"-0123456789".contains(c))
             .filter(|num| !num.is_empty())
-            .flat_map(|num| num.parse::<i64>());
+            .flat_map(str::parse::<i64>);
         let sensor = (nums.next().unwrap(), nums.next().unwrap());
         let beakon = (nums.next().unwrap(), nums.next().unwrap());
         let reach = (sensor.0.abs_diff(beakon.0) + sensor.1.abs_diff(beakon.1)) as i64
@@ -31,13 +31,13 @@ pub(crate) fn part1(text: &str) -> u64 {
     count
 }
 
-pub(crate) fn part2(text: &str) -> i64 {
+pub fn part2(text: &str) -> i64 {
     let pairs = text
         .lines()
         .map(|line| {
             line.split(|c| !"-0123456789".contains(c))
                 .filter(|num| !num.is_empty())
-                .flat_map(|num| num.parse::<i64>())
+                .flat_map(str::parse::<i64>)
         })
         .map(|mut nums| {
             (
@@ -58,7 +58,7 @@ pub(crate) fn part2(text: &str) -> i64 {
                     break;
                 }
                 let mut found = true;
-                for &((x, y), (dx, dy)) in pairs.iter() {
+                for &((x, y), (dx, dy)) in &pairs {
                     let range = x.abs_diff(dx) + y.abs_diff(dy);
                     let distance = x.abs_diff(bx) + y.abs_diff(by);
                     if distance < range {

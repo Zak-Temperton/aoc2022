@@ -1,4 +1,4 @@
-pub(crate) fn part1(text: &str) -> u32 {
+pub fn part1(text: &str) -> u32 {
     let mut score = 0;
     for line in text.lines() {
         let line = line.as_bytes();
@@ -13,7 +13,7 @@ pub(crate) fn part1(text: &str) -> u32 {
     score
 }
 
-pub(crate) fn part2(text: &str) -> u32 {
+pub fn part2(text: &str) -> u32 {
     let mut score = 0;
     for line in text.lines() {
         let line = line.as_bytes();

@@ -9,18 +9,18 @@ enum Element {
 
 impl Element {
     fn new_element(&mut self, bytes: &mut Bytes) {
-        *self = Element::List(vec![Element::Empty]);
+        *self = Self::List(vec![Self::Empty]);
 
-        if let Element::List(list) = self {
+        if let Self::List(list) = self {
             while let Some(b) = bytes.next() {
                 match b {
                     b'[' => list.last_mut().unwrap().new_element(bytes),
                     b']' => return,
-                    b',' => list.push(Element::Empty),
+                    b',' => list.push(Self::Empty),
                     b if b.is_ascii_digit() => match list.last_mut() {
-                        Some(Element::Val(v)) => *v = *v * 10 + (b - b'0') as u32,
-                        Some(Element::Empty) => {
-                            *list.last_mut().unwrap() = Element::Val((b - b'0') as u32)
+                        Some(Self::Val(v)) => *v = *v * 10 + (b - b'0') as u32,
+                        Some(Self::Empty) => {
+                            *list.last_mut().unwrap() = Self::Val((b - b'0') as u32);
                         }
                         _ => panic!(),
                     },
@@ -32,9 +32,9 @@ impl Element {
 
     fn first_val(&self) -> Option<u32> {
         match self {
-            Element::List(l) => l[0].first_val(),
-            Element::Val(v) => Some(*v),
-            Element::Empty => None,
+            Self::List(l) => l[0].first_val(),
+            Self::Val(v) => Some(*v),
+            Self::Empty => None,
         }
     }
 }
@@ -60,7 +60,7 @@ impl Ord for Element {
 impl PartialOrd for Element {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         Some(match (self, other) {
-            (Element::List(l), Element::List(r)) => {
+            (Self::List(l), Self::List(r)) => {
                 let mut l = l.iter();
                 let mut r = r.iter();
                 loop {
@@ -77,21 +77,17 @@ impl PartialOrd for Element {
                     }
                 }
             }
-            (Element::List(_), Element::Val(_)) => self.cmp(&Element::List(vec![other.clone()])),
-            (Element::Val(_), Element::List(_)) => Element::List(vec![self.clone()]).cmp(other),
-            (Element::Val(l), Element::Val(r)) => l.cmp(r),
-            (Element::Val(_), Element::Empty) | (Element::List(_), Element::Empty) => {
-                Ordering::Greater
-            }
-            (Element::Empty, Element::List(_)) | (Element::Empty, Element::Val(_)) => {
-                Ordering::Less
-            }
-            (Element::Empty, Element::Empty) => Ordering::Equal,
+            (Self::List(_), Self::Val(_)) => self.cmp(&Self::List(vec![other.clone()])),
+            (Self::Val(_), Self::List(_)) => Self::List(vec![self.clone()]).cmp(other),
+            (Self::Val(l), Self::Val(r)) => l.cmp(r),
+            (Self::Val(_) | Self::List(_), Self::Empty) => Ordering::Greater,
+            (Self::Empty, Self::List(_) | Self::Val(_)) => Ordering::Less,
+            (Self::Empty, Self::Empty) => Ordering::Equal,
         })
     }
 }
 
-pub(crate) fn part1(text: &str) -> usize {
+pub fn part1(text: &str) -> usize {
     let mut sum = 0;
     for (i, lines) in text.lines().array_chunks::<3>().enumerate() {
         let mut left = Element::Empty;
@@ -105,7 +101,7 @@ pub(crate) fn part1(text: &str) -> usize {
     sum
 }
 
-pub(crate) fn part2(text: &str) -> usize {
+pub fn part2(text: &str) -> usize {
     let low = 2;
     let high = 6;
     let mut low_index = 1;
@@ -116,7 +112,7 @@ pub(crate) fn part2(text: &str) -> usize {
         match element.first_val() {
             None => {
                 low_index += 1;
-                high_index += 1
+                high_index += 1;
             }
             Some(v) if high > v => {
                 high_index += 1;

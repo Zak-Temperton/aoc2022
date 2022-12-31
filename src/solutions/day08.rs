@@ -46,7 +46,7 @@ fn visibile_surface<R>(
     }
 }
 
-pub(crate) fn part1(text: &str) -> usize {
+pub fn part1(text: &str) -> usize {
     let mut forest = Vec::new();
     for line in text.lines() {
         forest.push(line.as_bytes());
@@ -91,7 +91,7 @@ where
     *score *= view;
 }
 
-pub(crate) fn part2(text: &str) -> usize {
+pub fn part2(text: &str) -> usize {
     let mut forest = Vec::new();
     for line in text.lines() {
         forest.push(line.as_bytes());

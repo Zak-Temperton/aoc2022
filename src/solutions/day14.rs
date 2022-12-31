@@ -8,7 +8,7 @@ struct Cave {
 
 impl From<&str> for Cave {
     fn from(text: &str) -> Self {
-        let mut cave = Cave::new();
+        let mut cave = Self::new();
         for line in text.lines() {
             let mut split = line.split(" -> ");
             let mut last = get_pos(&mut split).unwrap();
@@ -36,8 +36,8 @@ impl From<&str> for Cave {
 }
 
 impl Cave {
-    pub fn new() -> Cave {
-        Cave {
+    pub fn new() -> Self {
+        Self {
             map: VecDeque::from([Vec::new()]),
             offset: 500,
             depth: 0,
@@ -50,7 +50,7 @@ impl Cave {
             if !self.get(x, y as usize) && y != self.depth {
                 self.insert(x, y as usize);
                 *count += 1;
-                self.add_sand((x, y), count)
+                self.add_sand((x, y), count);
             }
         }
     }
@@ -87,7 +87,7 @@ fn get_pos(split: &mut std::str::Split<&str>) -> Option<(isize, isize)> {
     Some((last.next()?.parse().unwrap(), last.next()?.parse().unwrap()))
 }
 
-pub(crate) fn part1(text: &str) -> usize {
+pub fn part1(text: &str) -> usize {
     let mut cave = Cave::from(text);
     let mut count = 0;
     'abyss: loop {
@@ -111,7 +111,7 @@ pub(crate) fn part1(text: &str) -> usize {
     count
 }
 
-pub(crate) fn part2(text: &str) -> usize {
+pub fn part2(text: &str) -> usize {
     let mut cave = Cave::from(text);
     cave.depth += 2;
     let mut count = 1;

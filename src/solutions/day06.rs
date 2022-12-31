@@ -28,11 +28,11 @@ fn solution(text: &str, packet_len: usize) -> usize {
     panic!("Marker not found")
 }
 
-pub(crate) fn part1(text: &str) -> usize {
+pub fn part1(text: &str) -> usize {
     solution(text, 4)
 }
 
-pub(crate) fn part2(text: &str) -> usize {
+pub fn part2(text: &str) -> usize {
     solution(text, 14)
 }
 

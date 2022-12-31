@@ -125,7 +125,7 @@ fn drop_rock(
     }
 }
 
-pub(crate) fn part1(text: &str) -> usize {
+pub fn part1(text: &str) -> usize {
     let mut chamber = vec![[false; 7]];
     let mut highest = 0;
     let mut count = 0;
@@ -147,7 +147,7 @@ fn column_heights(map: &[[bool; 7]], highest: usize) -> [usize; 7] {
     heights
 }
 
-pub(crate) fn part2(text: &str) -> usize {
+pub fn part2(text: &str) -> usize {
     let mut chamber = vec![[false; 7]];
     let mut highest = 0;
     let mut total_height = 0;

@@ -1,6 +1,6 @@
 use std::collections::{HashMap, HashSet};
 
-pub(crate) fn part1(text: &str) -> usize {
+pub fn part1(text: &str) -> usize {
     let mut map = Vec::new();
     let mut count = 0;
     for line in text.lines() {
@@ -26,17 +26,15 @@ pub(crate) fn part1(text: &str) -> usize {
             for (x, elf) in row.iter().enumerate() {
                 if *elf {
                     let plan = create_plan(x, y, &map, i);
-                    if !failed_plans.contains(&plan) {
-                        if plans.contains_key(&plan) {
-                            let failed = plans.remove(&plan).unwrap();
-                            failed_plans.insert(plan);
-                            plans.insert(failed, failed);
-                            plans.insert((x + 1, y + 1), (x + 1, y + 1));
-                        } else {
-                            plans.insert(plan, (x + 1, y + 1));
-                        }
-                    } else {
+                    if failed_plans.contains(&plan) {
                         plans.insert((x + 1, y + 1), (x + 1, y + 1));
+                    } else if plans.contains_key(&plan) {
+                        let failed = plans.remove(&plan).unwrap();
+                        failed_plans.insert(plan);
+                        plans.insert(failed, failed);
+                        plans.insert((x + 1, y + 1), (x + 1, y + 1));
+                    } else {
+                        plans.insert(plan, (x + 1, y + 1));
                     }
                 }
             }
@@ -44,11 +42,11 @@ pub(crate) fn part1(text: &str) -> usize {
         let mut new_map = Vec::new();
         for ((x, y), _) in plans.drain() {
             if y >= new_map.len() {
-                new_map.extend(vec![Vec::new(); y - new_map.len() + 1])
+                new_map.extend(vec![Vec::new(); y - new_map.len() + 1]);
             }
             if x >= new_map[y].len() {
                 let len = new_map[y].len();
-                new_map[y].extend(vec![false; x - len + 1])
+                new_map[y].extend(vec![false; x - len + 1]);
             }
             new_map[y][x] = true;
             if x < minx {
@@ -117,7 +115,7 @@ fn is_elf(map: &[Vec<bool>], x: usize, y: usize) -> bool {
     *map.get(y).and_then(|row| row.get(x)).unwrap_or(&false)
 }
 
-pub(crate) fn part2(text: &str) -> usize {
+pub fn part2(text: &str) -> usize {
     let mut map = Vec::new();
     for line in text.lines() {
         map.push(Vec::new());
@@ -145,17 +143,15 @@ pub(crate) fn part2(text: &str) -> usize {
                     if !moving && moved {
                         moving = true;
                     }
-                    if !failed_plans.contains(&plan) {
-                        if plans.contains_key(&plan) {
-                            let failed = plans.remove(&plan).unwrap();
-                            failed_plans.insert(plan);
-                            plans.insert(failed, failed);
-                            plans.insert((x + 1, y + 1), (x + 1, y + 1));
-                        } else {
-                            plans.insert(plan, (x + 1, y + 1));
-                        }
-                    } else {
+                    if failed_plans.contains(&plan) {
                         plans.insert((x + 1, y + 1), (x + 1, y + 1));
+                    } else if plans.contains_key(&plan) {
+                        let failed = plans.remove(&plan).unwrap();
+                        failed_plans.insert(plan);
+                        plans.insert(failed, failed);
+                        plans.insert((x + 1, y + 1), (x + 1, y + 1));
+                    } else {
+                        plans.insert(plan, (x + 1, y + 1));
                     }
                 }
             }
@@ -163,11 +159,11 @@ pub(crate) fn part2(text: &str) -> usize {
         let mut new_map = Vec::new();
         for ((x, y), _) in plans.drain() {
             if y >= new_map.len() {
-                new_map.extend(vec![Vec::new(); y - new_map.len() + 1])
+                new_map.extend(vec![Vec::new(); y - new_map.len() + 1]);
             }
             if x >= new_map[y].len() {
                 let len = new_map[y].len();
-                new_map[y].extend(vec![false; x - len + 1])
+                new_map[y].extend(vec![false; x - len + 1]);
             }
             new_map[y][x] = true;
             if x < minx {

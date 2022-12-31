@@ -7,8 +7,8 @@ struct State {
 }
 
 impl State {
-    pub fn new(pos: (usize, usize), minute: usize) -> Self {
-        State { pos, minute }
+    pub const fn new(pos: (usize, usize), minute: usize) -> Self {
+        Self { pos, minute }
     }
 }
 
@@ -24,7 +24,7 @@ impl PartialOrd for State {
     }
 }
 
-pub(crate) fn part1(text: &str) -> usize {
+pub fn part1(text: &str) -> usize {
     let height = text.lines().count();
     let width = text.lines().next().unwrap().len();
     let period = 600;
@@ -123,33 +123,32 @@ fn min_time(
                 next.push(State::new((pos.0, pos.1 - 1), n.minute + 1));
             }
             continue;
-        } else {
-            if (pos.1 < height - 2) && valleys[z][pos.1 + 1][pos.0].is_empty() {
-                valleys[z][pos.1 + 1][pos.0].push('.');
-                next.push(State::new((pos.0, pos.1 + 1), n.minute + 1));
-            }
-            if valleys[z][pos.1][pos.0].is_empty() {
-                valleys[z][pos.1][pos.0].push('.');
-                next.push(State::new(pos, n.minute + 1));
-            }
-            if pos.0 < width - 2 && valleys[z][pos.1][pos.0 + 1].is_empty() {
-                valleys[z][pos.1][pos.0 + 1].push('.');
-                next.push(State::new((pos.0 + 1, pos.1), n.minute + 1));
-            }
-            if pos.0 > 1 && valleys[z][pos.1][pos.0 - 1].is_empty() {
-                valleys[z][pos.1][pos.0 - 1].push('.');
-                next.push(State::new((pos.0 - 1, pos.1), n.minute + 1));
-            }
-            if pos.1 > 1 && valleys[z][pos.1 - 1][pos.0].is_empty() {
-                valleys[z][pos.1 - 1][pos.0].push('.');
-                next.push(State::new((pos.0, pos.1 - 1), n.minute + 1));
-            }
+        }
+        if (pos.1 < height - 2) && valleys[z][pos.1 + 1][pos.0].is_empty() {
+            valleys[z][pos.1 + 1][pos.0].push('.');
+            next.push(State::new((pos.0, pos.1 + 1), n.minute + 1));
+        }
+        if valleys[z][pos.1][pos.0].is_empty() {
+            valleys[z][pos.1][pos.0].push('.');
+            next.push(State::new(pos, n.minute + 1));
+        }
+        if pos.0 < width - 2 && valleys[z][pos.1][pos.0 + 1].is_empty() {
+            valleys[z][pos.1][pos.0 + 1].push('.');
+            next.push(State::new((pos.0 + 1, pos.1), n.minute + 1));
+        }
+        if pos.0 > 1 && valleys[z][pos.1][pos.0 - 1].is_empty() {
+            valleys[z][pos.1][pos.0 - 1].push('.');
+            next.push(State::new((pos.0 - 1, pos.1), n.minute + 1));
+        }
+        if pos.1 > 1 && valleys[z][pos.1 - 1][pos.0].is_empty() {
+            valleys[z][pos.1 - 1][pos.0].push('.');
+            next.push(State::new((pos.0, pos.1 - 1), n.minute + 1));
         }
     }
     unreachable!()
 }
 
-pub(crate) fn part2(text: &str) -> usize {
+pub fn part2(text: &str) -> usize {
     let height = text.lines().count();
     let width = text.lines().next().unwrap().len();
     let period = 600;

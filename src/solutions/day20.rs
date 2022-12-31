@@ -1,4 +1,4 @@
-pub(crate) fn part1(text: &str) -> i64 {
+pub fn part1(text: &str) -> i64 {
     let mut list = Vec::new();
     for (i, line) in text.lines().enumerate() {
         list.push((i, line.parse::<i64>().unwrap()));
@@ -16,10 +16,10 @@ pub(crate) fn part1(text: &str) -> i64 {
         + list[(zero + 3000) % list.len()].1
 }
 
-pub(crate) fn part2(text: &str) -> i64 {
+pub fn part2(text: &str) -> i64 {
     let mut list = Vec::new();
     for (i, line) in text.lines().enumerate() {
-        list.push((i, line.parse::<i64>().unwrap() * 811589153));
+        list.push((i, line.parse::<i64>().unwrap() * 811_589_153));
     }
     for _ in 0..10 {
         for i in 0..list.len() {

@@ -6,7 +6,7 @@ fn setup(lines: &mut std::str::Lines) -> Vec<Vec<char>> {
             .step_by(4)
             .enumerate()
             .filter(|(_, c)| *c != ' ')
-            .for_each(|(i, c)| stacks[i].push(c))
+            .for_each(|(i, c)| stacks[i].push(c));
     }
     stacks
 }
@@ -28,12 +28,12 @@ fn get_result(stacks: Vec<Vec<char>>) -> String {
     res
 }
 
-pub(crate) fn part1(text: &str) -> String {
+pub fn part1(text: &str) -> String {
     let mut lines = text.lines();
     let mut stacks = setup(&mut lines);
     for line in lines.skip(2) {
         let (amount, from, to, from_len) = get_params(line, &stacks);
-        for i in 1..amount + 1 {
+        for i in 1..=amount {
             let tmp = stacks[from][from_len - i];
             stacks[to].push(tmp);
         }
@@ -42,12 +42,12 @@ pub(crate) fn part1(text: &str) -> String {
     get_result(stacks)
 }
 
-pub(crate) fn part2(text: &str) -> String {
+pub fn part2(text: &str) -> String {
     let mut lines = text.lines();
     let mut stacks = setup(&mut lines);
     for line in lines.skip(2) {
         let (amount, from, to, from_len) = get_params(line, &stacks);
-        for i in (1..amount + 1).rev() {
+        for i in (1..=amount).rev() {
             let tmp = stacks[from][from_len - i];
             stacks[to].push(tmp);
         }

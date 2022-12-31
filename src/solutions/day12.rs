@@ -46,7 +46,7 @@ fn bfs(map: &[Vec<u8>], mut start: Vec<Pos>, end: Pos, cells: &mut [Vec<bool>]) 
         let mut new = Vec::new();
         steps += 1;
         for i in [-1, 1] {
-            for cell in start.iter() {
+            for cell in &start {
                 if !(cell.0 == 0 && i == -1 || cell.0 == map[0].len() - 1 && i == 1) {
                     let new_pos = Pos((cell.0 as isize + i) as usize, cell.1);
                     if let Some(value) = test_cell(map, cell, new_pos, cells, end, steps, &mut new)
@@ -90,7 +90,7 @@ fn find_b(map: &[Vec<u8>], mut start: Vec<Pos>, cells: &mut [Vec<bool>]) -> Vec<
     while !start.is_empty() {
         let mut new = Vec::new();
         for i in [-1, 1] {
-            for cell in start.iter() {
+            for cell in &start {
                 if !(cell.0 == 0 && i == -1 || cell.0 == map[0].len() - 1 && i == 1) {
                     let new_pos = Pos((cell.0 as isize + i) as usize, cell.1);
                     test_cell_b(cells, new_pos, map, &mut starts, &mut new);
@@ -106,13 +106,13 @@ fn find_b(map: &[Vec<u8>], mut start: Vec<Pos>, cells: &mut [Vec<bool>]) -> Vec<
     starts
 }
 
-pub(crate) fn part1(text: &str) -> usize {
+pub fn part1(text: &str) -> usize {
     let (map, start, end) = init_map(text);
     let mut cells = vec![vec![false; map[0].len()]; map.len()];
     bfs(&map, vec![start], end, &mut cells)
 }
 
-pub(crate) fn part2(text: &str) -> usize {
+pub fn part2(text: &str) -> usize {
     let (map, start, end) = init_map(text);
     let mut cells = vec![vec![false; map[0].len()]; map.len()];
     let starts = find_b(&map, vec![start], &mut cells);

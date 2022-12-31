@@ -23,7 +23,6 @@ fn snafu_to_decimal(snafu: &str) -> i64 {
         res += match c {
             '=' => -2,
             '-' => -1,
-            '0' => 0,
             '1' => 1,
             '2' => 2,
             _ => 0,
@@ -32,7 +31,7 @@ fn snafu_to_decimal(snafu: &str) -> i64 {
     res
 }
 
-pub(crate) fn part1(text: &str) -> String {
+pub fn part1(text: &str) -> String {
     decimal_to_snafu(text.lines().map(snafu_to_decimal).sum())
 }
 

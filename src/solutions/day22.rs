@@ -1,19 +1,15 @@
 fn loops(posx: usize, posy: usize, dir: usize) -> (usize, usize) {
     match (posx / 50, posy / 50, dir) {
         (1, 0, 2) => (149, posy),
-        (1, 0, 3) => (posx, 149),
-        (2, 0, 0) => (50, posy),
-        (2, 0, 1) => (posx, 0),
-        (2, 0, 3) => (posx, 49),
-        (1, 1, 0) => (50, posy),
-        (1, 1, 2) => (99, posy),
-        (0, 2, 2) => (99, posy),
-        (0, 2, 3) => (posx, 199),
-        (1, 2, 1) => (posx, 0),
-        (1, 2, 0) => (0, posy),
-        (0, 3, 0) => (0, posy),
-        (0, 3, 1) => (posx, 100),
         (0, 3, 2) => (49, posy),
+        (1, 0, 3) => (posx, 149),
+        (0, 2, 3) => (posx, 199),
+        (0, 3, 1) => (posx, 100),
+        (2, 0, 3) => (posx, 49),
+        (2, 0, 0) | (1, 1, 0) => (50, posy),
+        (2, 0, 1) | (1, 2, 1) => (posx, 0),
+        (1, 1, 2) | (0, 2, 2) => (99, posy),
+        (1, 2, 0) | (0, 3, 0) => (0, posy),
         _ => unreachable!(),
     }
 }
@@ -43,7 +39,7 @@ fn take_steps(map: &[&[u8]], steps: &mut usize, dir: usize, posx: &mut usize, po
     *steps = 0;
 }
 
-pub(crate) fn part1(text: &str) -> usize {
+pub fn part1(text: &str) -> usize {
     let mut lines = text.lines();
     let mut map = Vec::new();
     for line in lines.by_ref() {
@@ -132,7 +128,7 @@ fn take_steps_on_cube(
     *steps = 0;
 }
 
-pub(crate) fn part2(text: &str) -> usize {
+pub fn part2(text: &str) -> usize {
     let mut lines = text.lines();
     let mut map = Vec::new();
     for line in lines.by_ref() {

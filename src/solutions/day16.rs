@@ -18,7 +18,7 @@ impl From<&str> for Valve {
         let mut split = line.split("; ");
         let s1 = split.next().unwrap();
         let s2 = split.next().unwrap();
-        Valve {
+        Self {
             id: name_to_id(&s1[6..8]),
             flow_rate: s1[23..].parse::<usize>().unwrap(),
             tunnels: s2[22..]
@@ -57,7 +57,10 @@ fn parse_input_to_valves(text: &str) -> HashMap<usize, Valve> {
         valves.insert(valve.id, valve);
     }
     let mut new_valves = HashMap::new();
-    for &from in working_valves.iter().chain([name_to_id("AA")].iter()) {
+    for &from in working_valves
+        .iter()
+        .chain(std::iter::once(&name_to_id("AA")))
+    {
         let valve = valves.get(&from).unwrap();
         let mut new_valve = Valve {
             flow_rate: valve.flow_rate,
@@ -65,10 +68,10 @@ fn parse_input_to_valves(text: &str) -> HashMap<usize, Valve> {
             open: false,
             tunnels: Vec::new(),
         };
-        for &to in working_valves.iter() {
+        for &to in &working_valves {
             if from != to {
                 let len = bfs(from, to, &mut valves, 0);
-                new_valve.tunnels.push((to, len))
+                new_valve.tunnels.push((to, len));
             }
         }
         new_valves.insert(from, new_valve);
@@ -95,7 +98,7 @@ fn solve_part1(cur: usize, valves: &mut HashMap<usize, Valve>, time: usize) -> u
     best
 }
 
-pub(crate) fn part1(text: &str) -> usize {
+pub fn part1(text: &str) -> usize {
     let mut valves = parse_input_to_valves(text);
     solve_part1(name_to_id("AA"), &mut valves, 30)
 }
@@ -119,7 +122,7 @@ fn solve_part2(cur: usize, valves: &mut HashMap<usize, Valve>, time: usize) -> u
     best
 }
 
-pub(crate) fn part2(text: &str) -> usize {
+pub fn part2(text: &str) -> usize {
     let mut valves = parse_input_to_valves(text);
     solve_part2(name_to_id("AA"), &mut valves, 26)
 }

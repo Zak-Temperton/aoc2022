@@ -8,8 +8,8 @@ struct State {
 }
 
 impl State {
-    pub fn new(time: u32) -> Self {
-        State {
+    pub const fn new(time: u32) -> Self {
+        Self {
             resources: [0; 4],
             robots: [1, 0, 0, 0],
             time,
@@ -118,13 +118,13 @@ fn max_geodes_processed(
     res
 }
 
-pub(crate) fn part1(text: &str) -> u32 {
+pub fn part1(text: &str) -> u32 {
     let mut sum = 0;
     for line in text.lines() {
         let mut split = line
             .split(|c: char| !c.is_ascii_digit())
             .filter(|num| !num.is_empty())
-            .flat_map(|num| num.parse::<u32>());
+            .flat_map(str::parse);
         let blueprint = split.next().unwrap();
         let ore_cost = split.next().unwrap();
         let clay_cost = split.next().unwrap();
@@ -137,14 +137,14 @@ pub(crate) fn part1(text: &str) -> u32 {
     sum
 }
 
-pub(crate) fn part2(text: &str) -> u32 {
+pub fn part2(text: &str) -> u32 {
     let mut product = 1;
     for line in text.lines().take(3) {
         let mut split = line
             .split(|c: char| !c.is_ascii_digit())
             .filter(|num| !num.is_empty())
             .skip(1)
-            .flat_map(|num| num.parse::<u32>());
+            .flat_map(str::parse);
         let ore_cost = split.next().unwrap();
         let clay_cost = split.next().unwrap();
         let obsidian_cost = (split.next().unwrap(), split.next().unwrap());

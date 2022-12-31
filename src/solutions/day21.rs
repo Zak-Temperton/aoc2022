@@ -9,7 +9,7 @@ enum Job {
     Num(i64),
 }
 
-fn name_to_u32(name: &str) -> u32 {
+const fn name_to_u32(name: &str) -> u32 {
     let mut res = 0;
     let bytes = name.as_bytes();
     let mut i = 0;
@@ -31,7 +31,7 @@ fn run_job(key: u32, monkeys: &HashMap<u32, Job>) -> i64 {
     }
 }
 
-pub(crate) fn part1(text: &str) -> i64 {
+pub fn part1(text: &str) -> i64 {
     let mut monkeys = HashMap::new();
     for line in text.lines() {
         let mut split = line.split(": ");
@@ -138,10 +138,7 @@ fn prepare(key: u32, monkeys: &mut HashMap<u32, Input>) -> bool {
         return true;
     }
     match *monkeys.get(&key).unwrap() {
-        Input::Const(Job::Add(l, r))
-        | Input::Const(Job::Sub(l, r))
-        | Input::Const(Job::Mul(l, r))
-        | Input::Const(Job::Div(l, r)) => {
+        Input::Const(Job::Add(l, r) | Job::Sub(l, r) | Job::Mul(l, r) | Job::Div(l, r)) => {
             if prepare(l, monkeys) | prepare(r, monkeys) {
                 convert(key, monkeys);
                 true
@@ -153,7 +150,7 @@ fn prepare(key: u32, monkeys: &mut HashMap<u32, Input>) -> bool {
     }
 }
 
-pub(crate) fn part2(text: &str) -> i64 {
+pub fn part2(text: &str) -> i64 {
     let mut monkeys = HashMap::new();
     for line in text.lines() {
         let mut split = line.split(": ");
@@ -197,20 +194,37 @@ pub(crate) fn part2(text: &str) -> i64 {
         }
     }
     prepare(name_to_u32("root"), &mut monkeys);
-    let (left, right) = match *monkeys.get(&name_to_u32("root")).unwrap() {
-        Input::Human(Job::Add(l, r))
-        | Input::Human(Job::Sub(l, r))
-        | Input::Human(Job::Mul(l, r))
-        | Input::Human(Job::Div(l, r)) => (l, r),
-        _ => unreachable!(),
-    };
-    if let Input::Const(_) = monkeys.get(&left).unwrap() {
-        let to_match = run_job2(left, &monkeys);
-        get_match(right, &monkeys, to_match)
+    // let (left, right) = match *monkeys.get(&name_to_u32("root")).unwrap() {
+    //     Input::Human(Job::Add(l, r))
+    //     | Input::Human(Job::Sub(l, r))
+    //     | Input::Human(Job::Mul(l, r))
+    //     | Input::Human(Job::Div(l, r)) => (l, r),
+    //     _ => unreachable!(),
+    // };
+    if let Input::Human(
+        Job::Add(left, right)
+        | Job::Sub(left, right)
+        | Job::Mul(left, right)
+        | Job::Div(left, right),
+    ) = *monkeys.get(&name_to_u32("root")).unwrap()
+    {
+        if let Input::Const(_) = monkeys.get(&left).unwrap() {
+            let to_match = run_job2(left, &monkeys);
+            get_match(right, &monkeys, to_match)
+        } else {
+            let to_match = run_job2(right, &monkeys);
+            get_match(left, &monkeys, to_match)
+        }
     } else {
-        let to_match = run_job2(right, &monkeys);
-        get_match(left, &monkeys, to_match)
+        unreachable!()
     }
+    // if let Input::Const(_) = monkeys.get(&left).unwrap() {
+    //     let to_match = run_job2(left, &monkeys);
+    //     get_match(right, &monkeys, to_match)
+    // } else {
+    //     let to_match = run_job2(right, &monkeys);
+    //     get_match(left, &monkeys, to_match)
+    // }
 }
 
 #[allow(soft_unstable, unused_imports, dead_code)]

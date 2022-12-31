@@ -1,4 +1,4 @@
-pub(crate) fn part1(text: &str) -> i32 {
+pub fn part1(text: &str) -> i32 {
     let mut cycle = 1;
     let mut x = 1;
     let mut test_cycle = 20;
@@ -26,8 +26,8 @@ pub(crate) fn part1(text: &str) -> i32 {
     sum
 }
 
-fn draw(sprite: &mut [Vec<u8>], cycle: &mut usize, x: &i32, y: &mut usize) {
-    if (*cycle as i32).abs_diff(*x) <= 1 {
+fn draw(sprite: &mut [Vec<u8>], cycle: &mut usize, x: i32, y: &mut usize) {
+    if (*cycle as i32).abs_diff(x) <= 1 {
         sprite[*y][*cycle] = b'#';
     }
     *cycle += 1;
@@ -37,7 +37,7 @@ fn draw(sprite: &mut [Vec<u8>], cycle: &mut usize, x: &i32, y: &mut usize) {
     }
 }
 
-pub(crate) fn part2(text: &str) -> Vec<Vec<u8>> {
+pub fn part2(text: &str) -> Vec<Vec<u8>> {
     let mut sprite = vec![vec![b'.'; 40]; 6];
     let mut cycle = 0;
     let mut x = 1;
@@ -46,10 +46,10 @@ pub(crate) fn part2(text: &str) -> Vec<Vec<u8>> {
     for line in text.split_whitespace() {
         match &line[..1] {
             "n" | "a" => {
-                draw(&mut sprite, &mut cycle, &x, &mut y);
+                draw(&mut sprite, &mut cycle, x, &mut y);
             }
             _ => {
-                draw(&mut sprite, &mut cycle, &x, &mut y);
+                draw(&mut sprite, &mut cycle, x, &mut y);
                 x += line.parse::<i32>().unwrap();
             }
         }
