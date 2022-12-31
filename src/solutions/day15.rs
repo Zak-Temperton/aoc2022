@@ -54,7 +54,7 @@ pub(crate) fn part2(text: &str) -> i64 {
             for d in 0..dist {
                 let bx = x + dir_x * d;
                 let by = y + dir_y * (dist + 1 - d);
-                if bx < 0 || by < 0 || bx > 4000000 || by > 4000000 {
+                if bx < 0 || by < 0 || bx > 4_000_000 || by > 4_000_000 {
                     break;
                 }
                 let mut found = true;
@@ -67,7 +67,7 @@ pub(crate) fn part2(text: &str) -> i64 {
                     }
                 }
                 if found {
-                    return bx * 4000000 + by;
+                    return bx * 4_000_000 + by;
                 }
             }
         }
