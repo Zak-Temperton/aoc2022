@@ -156,7 +156,7 @@ pub fn part2(text: &str) -> u32 {
     product
 }
 
-#[allow(soft_unstable, unused_imports, dead_code)]
+#[cfg(test)]
 mod bench {
     use super::*;
     use std::fs::read_to_string;

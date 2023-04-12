@@ -127,7 +127,7 @@ pub fn part2(text: &str) -> usize {
     solve_part2(name_to_id("AA"), &mut valves, 26)
 }
 
-#[allow(soft_unstable, unused_imports, dead_code)]
+#[cfg(test)]
 mod bench {
     use super::*;
     use std::fs::read_to_string;

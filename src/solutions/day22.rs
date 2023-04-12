@@ -162,7 +162,7 @@ pub fn part2(text: &str) -> usize {
     1000 * (posy + 1) + 4 * (posx + 1) + facing
 }
 
-#[allow(soft_unstable, unused_imports, dead_code)]
+#[cfg(test)]
 mod bench {
     use super::*;
     use std::fs::read_to_string;

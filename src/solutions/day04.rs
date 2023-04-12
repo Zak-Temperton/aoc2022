@@ -25,7 +25,7 @@ pub fn part2(text: &str) -> u32 {
     solution(text, |a| a[0] <= a[3] && a[1] >= a[2])
 }
 
-#[allow(soft_unstable, unused_imports, dead_code)]
+#[cfg(test)]
 mod bench {
     use super::*;
     use std::fs::read_to_string;

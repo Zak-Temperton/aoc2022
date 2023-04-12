@@ -35,7 +35,7 @@ pub fn part1(text: &str) -> String {
     decimal_to_snafu(text.lines().map(snafu_to_decimal).sum())
 }
 
-#[allow(soft_unstable, unused_imports, dead_code)]
+#[cfg(test)]
 mod bench {
     use super::*;
     use std::fs::read_to_string;

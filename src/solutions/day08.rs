@@ -117,7 +117,7 @@ pub fn part2(text: &str) -> usize {
     max_score
 }
 
-#[allow(soft_unstable, unused_imports, dead_code)]
+#[cfg(test)]
 mod bench {
     use super::*;
     use std::fs::read_to_string;

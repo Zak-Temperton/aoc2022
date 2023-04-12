@@ -1,42 +1,30 @@
-use std::collections::VecDeque;
-
-fn solution(text: &str, packet_len: usize) -> usize {
-    let mut packet = VecDeque::with_capacity(packet_len);
-    let mut count = 0;
-
-    for (i, c) in text.chars().enumerate().take(packet_len) {
-        if let Some(j) = packet.iter().rev().position(|&x| x == c) {
-            if i - j >= count {
-                count = i - j;
-            }
+fn solution(input: &[u8], packet_len: usize) -> Option<usize> {
+    let mut idx = 0;
+    while let Some(slice) = input.get(idx..idx + packet_len) {
+        let mut state = 0;
+        if let Some(pos) = slice.iter().rposition(|b| {
+            let mask = 1 << (b & 0b00011111);
+            let ret = state & mask != 0;
+            state |= mask;
+            ret
+        }) {
+            idx += pos + 1;
+        } else {
+            return Some(idx + packet_len);
         }
-        packet.push_back(c);
     }
-    let mut count = 0;
-    for (i, c) in text.chars().enumerate().skip(4) {
-        packet.pop_front();
-        if let Some(j) = packet.iter().rev().position(|&x| x == c) {
-            if (packet_len - 1) - j >= count {
-                count = (packet_len - 1) - j;
-            }
-        } else if count == 0 {
-            return i + 1;
-        }
-        count -= 1;
-        packet.push_back(c);
-    }
-    panic!("Marker not found")
+    None
 }
 
 pub fn part1(text: &str) -> usize {
-    solution(text, 4)
+    solution(text.as_bytes(), 4).unwrap()
 }
 
 pub fn part2(text: &str) -> usize {
-    solution(text, 14)
+    solution(text.as_bytes(), 14).unwrap()
 }
 
-#[allow(soft_unstable, unused_imports, dead_code)]
+#[cfg(test)]
 mod bench {
     use super::*;
     use std::fs::read_to_string;

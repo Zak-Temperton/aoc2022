@@ -227,7 +227,7 @@ pub fn part2(text: &str) -> i64 {
     // }
 }
 
-#[allow(soft_unstable, unused_imports, dead_code)]
+#[cfg(test)]
 mod bench {
     use super::*;
     use std::fs::read_to_string;

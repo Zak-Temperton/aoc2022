@@ -119,7 +119,7 @@ pub fn part2(text: &str) -> usize {
     bfs(&map, starts, end, &mut cells) + 1
 }
 
-#[allow(soft_unstable, unused_imports, dead_code)]
+#[cfg(test)]
 mod bench {
     use super::*;
     use std::fs::read_to_string;

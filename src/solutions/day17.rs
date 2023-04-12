@@ -175,7 +175,7 @@ pub fn part2(text: &str) -> usize {
     total_height + highest - 1
 }
 
-#[allow(soft_unstable, unused_imports, dead_code)]
+#[cfg(test)]
 mod bench {
     use super::*;
     use std::fs::read_to_string;

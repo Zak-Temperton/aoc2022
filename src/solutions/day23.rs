@@ -229,7 +229,7 @@ fn create_planb(x: usize, y: usize, map: &[Vec<bool>], i: usize) -> ((usize, usi
     ((x + 1, y + 1), false)
 }
 
-#[allow(soft_unstable, unused_imports, dead_code)]
+#[cfg(test)]
 mod bench {
     use super::*;
     use std::fs::read_to_string;
